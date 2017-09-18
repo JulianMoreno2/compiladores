@@ -38,10 +38,10 @@ boolean "boolean"
 "="        {return GLEICH;}
 "!="       {return UNGLEICH;}
 ","        {return KOMA;}
-"=="       {return VERGLEICH;}
+"=="       {return GLEICH_GLEICH;}
 "."        {return PUNKT}
-">="       {return GROSSERGLEICH;}
-"<="       {return KLEINERGLEICH;}
+">="       {return GROSSER_GLEICH;}
+"<="       {return KLEINER_GLEICH;}
 "("        {return KLAMMER_OFFEN;}
 ")"        {return KLAMMER_SCHLIESSEN;}
 ">"        {return GROSSER;}
