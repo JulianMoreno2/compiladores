@@ -36,29 +36,29 @@ boolean "boolean"
 {boolean}  {strcpy (yylval.art, yytext);return  DEFBOOLEAN;}
 
 "="        {return GLEICH;}
-"!="       {return VERSCHIEDENE;}
+"!="       {return UNGLEICH;}
 ","        {return KOMA;}
 "=="       {return VERGLEICH;}
-"."        {}
-">="       {return GROBERGLEICH;}
-"<="       {return WENIGERGLEICH;}
-"("        {return KLAM_OFFEN;}
-")"        {return KLAM_SCHLIESSEN;}
-">"        {return GROBER;}
-"<"        {return WENIGER;}
+"."        {return PUNKT}
+">="       {return GROSSERGLEICH;}
+"<="       {return KLEINERGLEICH;}
+"("        {return KLAMMER_OFFEN;}
+")"        {return KLAMMER_SCHLIESSEN;}
+">"        {return GROSSER;}
+"<"        {return KLEINER;}
 "{"        {return SCHLUOFFEN;}
 "}"        {return SCHLUSCHLIESSEN;}
-"+"        {return BESUMME;}
-"-"        {return BEMINDES;}
-"*"        {return BEMULT;}
-"/"        {return BETEI;}
+"+"        {return SUMME;}
+"-"        {return SUBSTRAKTION;}
+"*"        {return MULTIPLIKATION;}
+"/"        {return DIVISION;}
 "&"        {return UND;}
 "||"       {return ODER;}
 "!"        {return NICHT;}
 
-"haupt"    {return HAUPT;}
+"main"    {return MAIN;}
 "wenn"     {return WENN;}
-"anderes"  {return ANDERES;}
+"sonnst"  {return SONNST;}
 "wahrend"  {return WAHREND;}
 
 
