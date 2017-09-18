@@ -28,28 +28,29 @@ int yyerror(const char *nachricht) { printf("Syntax-Fehler: %s\n",nachricht);}
 %token <tipo> DEFBOOLEAN
 
 %token GLEICH
-%token VERSCHIEDENE
+%token UNGLEICH
 %token KOMA
-%token VERGLEICH
-%token GROBERGLEICH
-%token WENIGERGLEICH
-%token KLAM_OFFEN
-%token KLAM_SCHLIESSEN
-%token GROBER
-%token WENIGER
+%token GLEICH_GLEICH
+%token PUNKT
+%token GROSSER_GLEICH
+%token KLEINER_GLEICH
+%token KLAMMER_OFFEN
+%token KLAMMER_SCHLIESSEN
+%token GROSSER
+%token KLEINER
 %token SCHLUOFFEN
 %token SCHLUSCHLIESSEN
-%token BESUMME
-%token BEMINDES
-%token BEMULT
-%token BETEI
+%token SUMME
+%token SUBSTRAKTION
+%token MULTIPLIKATION
+%token DIVISION
 %token UND
 %token ODER
 %token NICHT
 
-%token HAUPT
+%token MAIN
 %token WENN
-%right ANDERES
+%right SONNST
 %token WAHREND
 %token <variable>CHARACTER
 %token <variable>BOOLEAN
