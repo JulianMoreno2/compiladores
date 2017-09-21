@@ -4,5 +4,6 @@
 *.tab.c
 *.tab.h
 *~
+*.~
 
 analyzator
