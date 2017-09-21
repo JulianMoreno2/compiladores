@@ -3,29 +3,27 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
-#include "tabla.c"
-#include "arbol.c"
-int yylex(); 
+int yylex();
 int yyerror(const char *nachricht) { printf("Syntax-Fehler: %s\n",nachricht);}
 %}
 
 
 %union {
     struct knoten_as * ast;
-    char char;
+    char charakter;
     int nummer;
     char variable[50];
     char art[10];
-    float float;
+    float schwimmende;
 }
 
 %token ZEILENENDE
 
-%token <tipo> DEFINTEGER
-%token <tipo> DEFFLOAT
-%token <tipo> DEFCHAR
-%token <tipo> DEFSTRING
-%token <tipo> DEFBOOLEAN
+%token <art> DEFINTEGER
+%token <art> DEFSCHWIMMENDE
+%token <art> DEFCHARAKTER
+%token <art> DEFSTRING
+%token <art> DEFBOOLEAN
 
 %token GLEICH
 %token UNGLEICH
@@ -52,44 +50,34 @@ int yyerror(const char *nachricht) { printf("Syntax-Fehler: %s\n",nachricht);}
 %token WENN
 %right SONNST
 %token WAHREND
-%token <variable>CHARACTER
-%token <variable>BOOLEAN
-%token <variable>VARIABLE
-%token <variable>STRING
-
+%token <variable> CHARAKTER
+%token <variable> BOOLEAN
+%token <variable> VARIABLE
+%token <variable> STRING
 %token <nummer> INTEGER
-%token <float> FLOAT
+%token <schwimmende> SCHWIMMENDE
 
-
-%type <ast> programa
-%type <ast> korper sentencia
-
-
+%type <ast> program korper satz
 
 %%
 
-programa: MAIN SCHLUOFFEN korper SCHLUSCHLIESSEN {
+program: MAIN SCHLUOFFEN korper SCHLUSCHLIESSEN {
 	printf("HALLO!");
-	4 = 4;
+  $$ = $3;
 }
 
-korper: sentencia korper {
-	printf("Alles gut!");
-        1 = 1;
-} 
-                        
-	| sentencia {
-		2 = 2;
-	}
-sentencia: sentencia {
-	3 = 3;
+korper: satz  {
+		$$ = $1;
+}
+
+satz: {
+	printf("SALTEN STRUJEN BAJEN");
 }
 ;
 
 %%
 
 int main (){
-    
+    yyparse ();
     return 0;
-
 }

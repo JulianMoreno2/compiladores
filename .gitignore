@@ -1,0 +1,7 @@
+// Git Ignore for Yacc and Flex
+
+*.yy.c
+*.tab.c
+*.tab.h
+
+analyzator
