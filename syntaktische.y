@@ -62,7 +62,7 @@ int yyerror(const char *nachricht) { printf("Syntax-Fehler: %s\n",nachricht);}
 %%
 
 program: MAIN SCHLUOFFEN korper SCHLUSCHLIESSEN {
-	printf("HALLO!");
+	printf("Tschuss!");
   $$ = $3;
 }
 
@@ -71,7 +71,7 @@ korper: satz  {
 }
 
 satz: {
-	printf("SALTEN STRUJEN BAJEN");
+	printf("SUBAN STRUJEN BAJEN");
 }
 ;
 
