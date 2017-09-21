@@ -19,7 +19,7 @@ int yyerror(const char *nachricht) { printf("Syntax-Fehler: %s\n",nachricht);}
 
 %token ZEILENENDE
 
-%token <typ> DEFGANZZAHL
+%token <typ> DEFINTEGER
 %token <typ> DEFGLEITKOMMA
 %token <typ> DEFZEICHEN
 %token <typ> DEFSTRING
@@ -54,7 +54,7 @@ int yyerror(const char *nachricht) { printf("Syntax-Fehler: %s\n",nachricht);}
 %token <variable> BOOLEAN
 %token <variable> VARIABLE
 %token <variable> STRING
-%token <nummer> GANZZAHL
+%token <nummer> INTEGER
 %token <gleitkomma> GLEITKOMMA
 
 %type <ast> program korper satz
