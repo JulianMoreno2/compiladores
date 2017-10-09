@@ -11,7 +11,7 @@ int yyerror(const char *nachricht) { printf("Syntax-Fehler: %s\n",nachricht);}
 %union {
     struct knoten_as * ast; //Implementar este struct
     char zeichen;
-    int nummer;
+    int ganzzahl;
     char variable[50];
     char typ[10]; // Revisar para que era esta palabra
     float gleitkomma;
@@ -54,12 +54,12 @@ int yyerror(const char *nachricht) { printf("Syntax-Fehler: %s\n",nachricht);}
 %token <variable> BOOLEAN
 %token <variable> VARIABLE
 %token <variable> STRING
-%token <nummer> GANZZAHL
+%token <ganzzahl> GANZZAHL
 %token <gleitkomma> GLEITKOMMA
 
 %type <ast> program
 %type <gleitkomma> fsatz
-%type <nummer> isatz
+%type <ganzzahl> isatz
 %type <zeichen> korper
 
 %%

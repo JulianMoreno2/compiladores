@@ -13,7 +13,7 @@ typedef char symbol[50];
 symbol symbol_tabelle[50][2];
 int reihe = 0;
 
-void hinzufugen ( symbol typ_eingegeben, symbol variable_eingegeben){
+void hinzufugen (symbol typ_eingegeben, symbol variable_eingegeben) {
 
     strcpy( symbol_tabelle[reihe][0], typ_eingegeben );
     strcpy( symbol_tabelle[reihe][1], variable_eingegeben );
@@ -35,22 +35,22 @@ void ist_typ (symbol variable, char* typ) {
     }
 }
 
-void ist_gleitkomma(symbol variable){
+void ist_gleitkomma (symbol variable) {
     symbol typ;
     ist_typ(variable, typ);
     int typ_gleitkomma = 0;
     typ_gleitkomma = (strcmp (typ, "gleitkomma") == 0);
-    if(!typ_gleitkomma){
+    if (!typ_gleitkomma) {
        yyerror("Die Variable muss von Gleitkomma Typ sein");
     }
 }
 
-void ist_ganzzahl(symbol variable){
+void ist_ganzzahl (symbol variable) {
     symbol typ;
     ist_typ(variable, typ);
     int typ_ganzzahl = 0;
     typ_ganzzahl = (strcmp (typ, "ganzzahl") == 0);
-    if(!typ_ganzzahl){
+    if (!typ_ganzzahl) {
        yyerror("Die Variable muss von Ganzzahl Typ sein");
     }
 }
