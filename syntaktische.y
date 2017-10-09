@@ -9,11 +9,11 @@ int yyerror(const char *nachricht) { printf("Syntax-Fehler: %s\n",nachricht);}
 
 
 %union {
-    struct knoten_as * ast;
+    struct knoten_as * ast; //Implementar este struct
     char zeichen;
     int nummer;
     char variable[50];
-    char typ[10];
+    char typ[10]; // Revisar para que era esta palabra
     float gleitkomma;
 }
 
@@ -57,27 +57,41 @@ int yyerror(const char *nachricht) { printf("Syntax-Fehler: %s\n",nachricht);}
 %token <nummer> GANZZAHL
 %token <gleitkomma> GLEITKOMMA
 
-%type <ast> program korper satz
+%type <ast> program
+%type <gleitkomma> fsatz
+%type <nummer> isatz
+%type <zeichen> korper
 
 %%
 
 program: MAIN SCHLUOFFEN korper SCHLUSCHLIESSEN {
-	printf("Tschuss!");
-  $$ = $3;
+  printf("End korper! \n");
 }
 
-korper: satz  {
-		$$ = $1;
-}
+korper:
+  fsatz {
+    $$ = $1;
+    printf("Gleitkomma: %f \n", $1);
+  }
+|
+  isatz {
+    $$ = $1;
+    printf("Ganzzahl: %i \n", $1);
+  }
 
-satz: {
-	printf("SUBAN STRUJEN BAJEN");
-}
+
+fsatz: GLEITKOMMA     { $$ = $1; }
+  | fsatz SUMME fsatz { $$ = $1 + $3; }
 ;
+
+isatz: GANZZAHL       { $$ = $1; }
+  | isatz SUMME isatz { $$ = $1 + $3; }
+;
+
 
 %%
 
 int main (){
-    yyparse ();
-    return 0;
+  yyparse ();
+  return 0;
 }

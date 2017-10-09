@@ -10,3 +10,6 @@ $ gcc -o analyzator lex.yy.c syntaktische.tab.c
 
 $ ./analyzator
 
+
+#Convenciones
+- 2 espacios de indentación
