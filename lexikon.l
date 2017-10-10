@@ -62,7 +62,7 @@ boolean        "boolean"
 "wahrend"      {return WAHREND;}
 
 
-{Ganzzahl}          {yylval.nummer = atoi(yytext);return GANZZAHL;}
+{Ganzzahl}          {yylval.ganzzahl = atoi(yytext);return GANZZAHL;}
 {Gleitkomma}  {yylval.gleitkomma = atof(yytext);return GLEITKOMMA;}
 {Boolean}      {strcpy (yylval.variable, yytext);return BOOLEAN;}
 {Variable}     {strcpy (yylval.variable, yytext); return VARIABLE;}

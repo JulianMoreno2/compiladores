@@ -1,17 +1,17 @@
-% {
+%{
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
 #include "baum.c"
 #include "tabelle.c"
-  int yylex();
-  int yyerror(const char *nachricht) { printf("Syntax-Fehler: %s\n", nachricht);}
-  %
-}
 
+int yylex();
+int yyerror(const char *nachricht) { printf("Syntax-Fehler: %s\n", nachricht);}
 
-% union {
+%}
+
+%union {
   struct knoten_as * baum; //Implementar este struct
   char zeichen;
   int ganzzahl;
@@ -20,55 +20,56 @@
   float gleitkomma;
 }
 
-% token ZEILENENDE
+%token ZEILENENDE
 
-% token <typ> DEFGANZZAHL
-% token <typ> DEFGLEITKOMMA
-% token <typ> DEFZEICHEN
-% token <typ> DEFSTRING
-% token <typ> DEFBOOLEAN
+%token <typ> DEFGANZZAHL
+%token <typ> DEFGLEITKOMMA
+%token <typ> DEFZEICHEN
+%token <typ> DEFSTRING
+%token <typ> DEFBOOLEAN
 
-% token GLEICH
-% token UNGLEICH
-% token KOMA
-% token GLEICH_GLEICH
-% token PUNKT
-% token GROSSER_GLEICH
-% token KLEINER_GLEICH
-% token KLAMMER_OFFEN
-% token KLAMMER_SCHLIESSEN
-% token GROSSER
-% token KLEINER
-% token SCHLUOFFEN
-% token SCHLUSCHLIESSEN
-% token SUMME
-% token SUBSTRAKTION
-% token MULTIPLIKATION
-% token DIVISION
-% token AUFGABE
-% token UND
-% token ODER
-% token NICHT
+%token GLEICH
+%token UNGLEICH
+%token KOMA
+%token GLEICH_GLEICH
+%token PUNKT
+%token GROSSER_GLEICH
+%token KLEINER_GLEICH
+%token KLAMMER_OFFEN
+%token KLAMMER_SCHLIESSEN
+%token GROSSER
+%token KLEINER
+%token SCHLUOFFEN
+%token SCHLUSCHLIESSEN
+%token SUMME
+%token SUBSTRAKTION
+%token MULTIPLIKATION
+%token DIVISION
+%token AUFGABE
+%token UND
+%token ODER
+%token NICHT
 
-% token MAIN
-% token WENN
-% right SONNST
-% token WAHREND
-% token <variable> ZEICHEN
-% token <variable> BOOLEAN
-% token <variable> VARIABLE
-% token <variable> STRING
-% token <ganzzahl> GANZZAHL
-% token <gleitkomma> GLEITKOMMA
+%token MAIN
+%token WENN
+%right SONNST
+%token WAHREND
+%token <variable> ZEICHEN
+%token <variable> BOOLEAN
+%token <variable> VARIABLE
+%token <variable> STRING
+%token <ganzzahl> GANZZAHL
+%token <gleitkomma> GLEITKOMMA
 
-% type <gleitkomma> fsatz
-% type <ganzzahl> isatz
+%type <baum> program aufgabe aussage ausdruck urteil korper
 
-% type <baum> aufgabe ausdruck gleitkomma_ausdruck gleitkomma_begriff gleitkomma_faktor gemischte_summe gemischte_ausdruck
+%type <baum> gleitkomma_ausdruck gleitkomma_begriff gleitkomma_faktor gleitkomma_wert
 
-% type <baum> program ganzzahl aussage urteil korper ganzzahl_wert ganzzahl_faktor ganzzahl_ausdruck
+%type <baum> ganzzahl_ausdruck ganzzahl_begriff ganzzahl_faktor ganzzahl_wert
 
-% %
+%type <baum> gemischte_summe gemischte_ausdruck
+
+%%
 
 program: MAIN SCHLUOFFEN korper SCHLUSCHLIESSEN {
   printf("End korper! \n");
@@ -119,63 +120,97 @@ VARIABLE GLEICH gleitkomma_ausdruck ZEILENENDE {
 VARIABLE GLEICH gemischte_ausdruck ZEILENENDE{
   existieren_kontatieren($1); 
   ist_gleitkomma($1);
-  nodo_as* variable_blatt = neuen_knoten_variable($1);
+  knoten_as* variable_blatt = neuen_knoten_variable($1);
   $$ = neuen_knoten_ausdruck(AUFGABE, "=", variable_blatt, $3);
 } | 
 VARIABLE GLEICH ganzzahl_ausdruck ZEILENENDE{
   existieren_kontatieren($1);
   ist_ganzzahl($1);
-  nodo_as* variable_blatt = neuen_knoten_variable($1);
+  knoten_as* variable_blatt = neuen_knoten_variable($1);
   $$ = neuen_knoten_ausdruck(AUFGABE, "=", variable_blatt, $3);
-}
-| VARIABLE GLEICH VARIABLE ZEILENENDE {
-  nodo_as* variable_blatt = neuen_knoten_variable($1);
-  nodo_as* v_dos = neuen_knoten_variable($3);
+} |
+VARIABLE GLEICH VARIABLE ZEILENENDE {
+  knoten_as* variable_blatt = neuen_knoten_variable($1);
+  knoten_as* v_dos = neuen_knoten_variable($3);
   if (!existieren($1) || !existieren($3)) {
     yyerror("Variable not definiten.");
   }
   $$ = neuen_knoten_ausdruck(AUFGABE, "=", variable_blatt, v_dos);
-  compararTipos($1, $3);
-}
-| VARIABLE GLEICH VARIABLE SUMME VARIABLE ZEILENENDE {
+  typen_vergleichen($1, $3);
+} |
+VARIABLE GLEICH VARIABLE SUMME VARIABLE ZEILENENDE {
   if (!existieren($1) || !existieren($3) || !existieren($5)) {
     yyerror("Variable not definiten.");
   }
-  compararTipos($1, $3);
-  compararTipos($1, $5);
-  comprobarVariasVariables($1, $3, $5);
-  nodo_as* variable_blatt = neuen_knoten_variable($1);
-  nodo_as* v_dos = neuen_knoten_variable($3);
-  nodo_as* v_tres = neuen_knoten_variable($5);
-  nodo_as* suma = neuen_knoten_ausdruck(EXPRESION, "+", v_dos, v_tres);
-  $$ = neuen_knoten_ausdruck(AUFGABE, "=", variable_blatt, suma);
+
+  typen_vergleichen($1, $3);
+  typen_vergleichen($1, $5);
+  // mehrere_variables_vergleichen($1, $3, $5);
+  // mehrere -> varias
+
+  knoten_as* variable_blatt = neuen_knoten_variable($1);
+  knoten_as* v_dos = neuen_knoten_variable($3);
+  knoten_as* v_tres = neuen_knoten_variable($5);
+  knoten_as* summe = neuen_knoten_ausdruck(AUSDRUCK, "+", v_dos, v_tres);
+
+  $$ = neuen_knoten_ausdruck(AUFGABE, "=", variable_blatt, summe);
 }
 
-/**
+gemischte_ausdruck:
+gemischte_summe {
+  $$ = $1;
+}
 
-korper:
-  fsatz {
-    $$ = $1;
-    printf("Gleitkomma: %f \n", $1);
-  }
-|
-  isatz {
-    $$ = $1;
-    printf("Ganzzahl: %i \n", $1);
-  }
+gemischte_summe:
+ganzzahl_ausdruck SUMME gleitkomma_ausdruck {
+  $$ = neuen_knoten_ausdruck(GEMISCHTE_SUMME,"+",$1,$3);
+} |
+gleitkomma_ausdruck SUMME ganzzahl_ausdruck {
+  $$ = neuen_knoten_ausdruck(GEMISCHTE_SUMME,"+",$1,$3);
+}
 
+gleitkomma_ausdruck:
+gleitkomma_ausdruck SUMME gleitkomma_begriff {
+  $$ = neuen_knoten_ausdruck(GLEITKOMMA_AUSDRUCK,"+",$1,$3);
+} |
+gleitkomma_begriff  {
+  $$ = $1;
+}
 
-fsatz: GLEITKOMMA     { $$ = $1; }
-  | fsatz SUMME fsatz { $$ = $1 + $3; }
-;
+gleitkomma_begriff:
+gleitkomma_faktor {
+  $$ = $1;
+}
 
-isatz: GANZZAHL       { $$ = $1; }
-  | isatz SUMME isatz { $$ = $1 + $3; }
-;
+gleitkomma_faktor: GLEITKOMMA {
+  $$ = neuen_knoten_gleitkomma($1);
+} |
+SCHLUOFFEN gleitkomma_ausdruck SCHLUSCHLIESSEN {
+  struct nodo_as* leer = 0;
+  $$ = neuen_knoten_ausdruck(GLEITKOMMA_FAKTOR ,"+", leer , $2);
+}
 
-*/
+ganzzahl_ausdruck:
+ganzzahl_ausdruck SUMME ganzzahl_begriff {
+  $$ = neuen_knoten_ausdruck(GANZZAHL_AUSDRUCK,"+",$1,$3);
+} |
+ganzzahl_begriff  {
+  $$ = $1;
+}
 
-% %
+ganzzahl_begriff:
+ganzzahl_faktor  {
+  $$ = $1;
+}
+
+ganzzahl_faktor: GANZZAHL{
+  $$ = neuen_knoten_ganzzahl($1);
+} |
+SCHLUOFFEN ganzzahl_ausdruck SCHLUSCHLIESSEN {
+  $$ = $2;
+}
+
+%%
 
 int main () {
   yyparse ();
