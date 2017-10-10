@@ -10,22 +10,23 @@
 #define MAIN 1
 #define KORPER 2 //cuerpo
 #define AUSSAGE 3 // declaracion
-#define AUFGABE 4 //asignacion
+#define AUFGABE 4 // asignacion
 #define URTEIL 5 // sentencia
-#define SUMME_GEMISCHTE 6 // mixto = gemischte?
-#define FAKTOR_GANZEN 7 // ganzen = entero?
-#define BEGRIFF_GANZEN 8 // begriff = termino?
-#define AUSDRUCK_GANZEN 9
-#define FAKTOR_GLEITKOMMA 10
-#define BEGRIFF_GLEITKOMMA 11
-#define AUSDRUCK_GLEITKOMMA 12 // ausdruck = expresion?
+#define GEMISCHTE_SUMME 6 // mixto = gemischte?
+#define GANZZAHL_FAKTOR 7 // ganzzahl = entero?
+#define GANZZAHL_BEGRIFF 8 // begriff = termino?
+#define GANZZAHL_AUSDRUCK 9
+#define GLEITKOMMA_FAKTOR 10
+#define GLEITKOMMA_BEGRIFF 11
+#define GLEITKOMMA_AUSDRUCK 12 // ausdruck = expresion?
 #define AUSDRUCK 13
-#define BLATT_GANZEN 14
-#define BLATT_GLEITKOMMA 15
+#define GANZZAHL_BLATT 14
+#define GLEITKOMMA_BLATT 15
+#define VARIABLE_BLATT 15
 
 typedef struct knoten_as
 {
-    char* operator;
+    char* operatore;
     char* variable;
     int knotenTyp;
     int ganzzahlWert;
@@ -39,10 +40,10 @@ typedef struct knoten_as
 } knoten_as;
 
 //Nuevo nodo expresion
-struct knoten_as* neuen_knoten_ausdruck (int knotenTyp, char* operator, struct knoten_as* linke, struct knoten_as* rechte) {
+struct knoten_as* neuen_knoten_ausdruck (int knotenTyp, char* operatore, struct knoten_as* linke, struct knoten_as* rechte) {
     struct knoten_as* neuenKnoten = (struct knoten_as*) malloc(sizeof(struct knoten_as));
-    neuenKnoten->operator = (char*) malloc(sizeof(char) * 2);
-    strcpy(neuenKnoten->operator, operator);
+    neuenKnoten->operatore = (char*) malloc(sizeof(char) * 2);
+    strcpy(neuenKnoten->operatore, operatore);
     neuenKnoten->knotenTyp = knotenTyp;
     neuenKnoten->mittel = 0;
     neuenKnoten->rechte = rechte;
@@ -50,9 +51,9 @@ struct knoten_as* neuen_knoten_ausdruck (int knotenTyp, char* operator, struct k
     return neuenKnoten;
 }
 
-struct knoten_as* neuen_knoten_ganzen (int wert) {
+struct knoten_as* neuen_knoten_ganzzahl (int wert) {
     struct knoten_as* neuenKnoten = (struct knoten_as*) malloc(sizeof(struct knoten_as));
-    neuenKnoten->knotenTyp = BLATT_GANZEN;
+    neuenKnoten->knotenTyp = GANZZAHL_BLATT;
     neuenKnoten->ganzzahlWert = wert;
     neuenKnoten->rechte = 0;
     neuenKnoten->linke = 0;
@@ -62,8 +63,21 @@ struct knoten_as* neuen_knoten_ganzen (int wert) {
 
 struct knoten_as* neuen_knoten_gleitkomma (float wert) {
     struct knoten_as* neuenKnoten = (struct knoten_as*) malloc(sizeof(struct knoten_as));
-    neuenKnoten->knotenTyp = BLATT_GLEITKOMMA;
+    neuenKnoten->knotenTyp = GLEITKOMMA_BLATT;
     neuenKnoten->gleitkommaWert = wert;
+    neuenKnoten->rechte = 0;
+    neuenKnoten->linke = 0;
+    neuenKnoten->mittel = 0;
+    return neuenKnoten;
+}
+
+struct knoten_as* neuen_knoten_variable(char* variable)
+{
+    struct knoten_as* neuenKnoten = (struct knoten_as*) malloc(sizeof(struct knoten_as));
+    neuenKnoten->knotenTyp = VARIABLE_BLATT;
+    neuenKnoten->variable = (char*) malloc(sizeof(char) * 50);
+    strcpy(neuenKnoten->variable, variable);
+    neuenKnoten->mittel = 0;
     neuenKnoten->rechte = 0;
     neuenKnoten->linke = 0;
     return neuenKnoten;

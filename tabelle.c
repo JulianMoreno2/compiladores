@@ -22,12 +22,32 @@ void hinzufugen (symbol typ_eingegeben, symbol variable_eingegeben) {
     reihe++;
 }
 
+int existieren (symbol variable_eingegeben) {
+
+    int existiert = 0;
+    int reihe_scannte = 0;
+
+    while (reihe_scannte < reihe_scannte && !existiert) {
+
+        existiert = strcmp (symbol_tabelle[reihe_scannte][1], variable_eingegeben ) == 0;
+        reihe_scannte++;
+    }
+
+    return existiert;
+}
+
+void existieren_kontatieren (symbol variable) {
+    if (!existieren(variable)) {
+        yyerror("Variable no definida.");
+    }
+}
+
 void ist_typ (symbol variable, char* typ) {
     int reihe_scannte = 0;
     int existiert = 0;
 
     while (reihe_scannte < reihe && existiert != 1) {
-        if(strcmp (symbol_tabelle[reihe_scannte][1], variable) == 0) {
+        if (strcmp (symbol_tabelle[reihe_scannte][1], variable) == 0) {
             existiert = 1;
             strcpy(typ, symbol_tabelle[reihe_scannte][0]);
         }
@@ -41,7 +61,7 @@ void ist_gleitkomma (symbol variable) {
     int typ_gleitkomma = 0;
     typ_gleitkomma = (strcmp (typ, "gleitkomma") == 0);
     if (!typ_gleitkomma) {
-       yyerror("Die Variable muss von Gleitkomma Typ sein");
+        yyerror("Die Variable muss von Gleitkomma Typ sein");
     }
 }
 
@@ -51,6 +71,6 @@ void ist_ganzzahl (symbol variable) {
     int typ_ganzzahl = 0;
     typ_ganzzahl = (strcmp (typ, "ganzzahl") == 0);
     if (!typ_ganzzahl) {
-       yyerror("Die Variable muss von Ganzzahl Typ sein");
+        yyerror("Die Variable muss von Ganzzahl Typ sein");
     }
 }
