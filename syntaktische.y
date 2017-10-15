@@ -72,12 +72,13 @@ int yyerror(const char *nachricht) { printf("Syntax-Fehler: %s\n", nachricht);}
 %%
 
 program: MAIN SCHLUOFFEN korper SCHLUSCHLIESSEN {
-  printf("End korper! \n");
+  printf("End program! \n");
   $3 -> knotenTyp = MAIN;
   $$ = $3;
 }
 
 korper: urteil korper {
+  printf("End korper! \n");
   $$ = neuen_knoten_ausdruck(KORPER, "", $1, $2);}
 
 | urteil {
@@ -92,6 +93,7 @@ urteil: aussage {$$ = $1;}
 
 aussage:
 DEFGANZZAHL VARIABLE ZEILENENDE  {
+  printf("End aussage! \n");
   knoten_as* variable = 0;
   $$ = variable;
   if (!existieren($2)) {
@@ -186,7 +188,7 @@ gleitkomma_faktor: GLEITKOMMA {
   $$ = neuen_knoten_gleitkomma($1);
 } |
 SCHLUOFFEN gleitkomma_ausdruck SCHLUSCHLIESSEN {
-  struct nodo_as* leer = 0;
+  struct knoten_as* leer = 0;
   $$ = neuen_knoten_ausdruck(GLEITKOMMA_FAKTOR ,"+", leer , $2);
 }
 

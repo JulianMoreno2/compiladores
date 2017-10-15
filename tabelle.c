@@ -27,9 +27,9 @@ int existieren (symbol variable_eingegeben) {
     int existiert = 0;
     int reihe_scannte = 0;
 
-    while (reihe_scannte < reihe_scannte && !existiert) {
+    while (reihe_scannte < reihe && existiert != 1) {
 
-        existiert = strcmp (symbol_tabelle[reihe_scannte][1], variable_eingegeben ) == 0;
+        existiert = strcmp (symbol_tabelle[reihe_scannte][1], variable_eingegeben) == 0;
         reihe_scannte++;
     }
 
@@ -42,14 +42,12 @@ void existieren_kontatieren (symbol variable) {
     }
 }
 
-
-
 void typ_des (symbol variable_eingegeben, char*  typ){
 
      int existiert = 0;
      int reihe_scannte = 0;
 
-     while ( reihe_scannte < reihe && existiert != 1){
+     while (reihe_scannte < reihe && existiert != 1){
 
         if (strcmp (symbol_tabelle[reihe_scannte][1], variable_eingegeben ) == 0){
             existiert = 1;
@@ -58,6 +56,31 @@ void typ_des (symbol variable_eingegeben, char*  typ){
 
         reihe_scannte++;
     }
+}
+
+void ist_typ (symbol variable, char* typ) {
+    int reihe_scannte = 0;
+    int existiert = 0;
+
+    while (reihe_scannte < reihe && existiert != 1) {
+        if (strcmp (symbol_tabelle[reihe_scannte][1], variable) == 0) {
+            existiert = 1;
+            strcpy(typ, symbol_tabelle[reihe_scannte][0]);
+        }
+        reihe_scannte++;
+    }
+}
+
+int ist_gleitkomma (symbol variable) {
+    symbol typ;
+    ist_typ(variable, typ);
+    strcmp(typ, "gleitkomma") == 0;
+}
+
+int ist_ganzzahl (symbol variable) {
+    symbol typ;
+    ist_typ(variable, typ);
+    return strcmp(typ, "ganzzahl") == 0;
 }
 
 int sind_ganzzahl (symbol variable_eingegeben_1, symbol variable_eingegeben_2){
@@ -69,7 +92,7 @@ int sind_ganzzahl (symbol variable_eingegeben_1, symbol variable_eingegeben_2){
   typ_des(variable_eingegeben_1, typ_1);
   typ_des(variable_eingegeben_2, typ_2);
 
-  if ( ist_ganzzahl (typ_1) == 1 && ist_ganzzahl (typ_2) == 1 ){
+  if ((ist_ganzzahl(typ_1) == 1) && (ist_ganzzahl(typ_2) == 1)){
       sind_ganzzahl = 1;
   }
 
@@ -95,39 +118,6 @@ int sind_vom_gleichen_typ (symbol variable_eingegeben_1, symbol variable_eingege
 void typen_vergleichen(symbol a,symbol b){
     if(!sind_vom_gleichen_typ(a,b)){
         yyerror("Inkompatible Typen");
-    }
-}
-
-void ist_typ (symbol variable, char* typ) {
-    int reihe_scannte = 0;
-    int existiert = 0;
-
-    while (reihe_scannte < reihe && existiert != 1) {
-        if (strcmp (symbol_tabelle[reihe_scannte][1], variable) == 0) {
-            existiert = 1;
-            strcpy(typ, symbol_tabelle[reihe_scannte][0]);
-        }
-        reihe_scannte++;
-    }
-}
-
-void ist_gleitkomma (symbol variable) {
-    symbol typ;
-    ist_typ(variable, typ);
-    int typ_gleitkomma = 0;
-    typ_gleitkomma = (strcmp (typ, "gleitkomma") == 0);
-    if (!typ_gleitkomma) {
-        yyerror("Die Variable muss von Gleitkomma Typ sein");
-    }
-}
-
-void ist_ganzzahl (symbol variable) {
-    symbol typ;
-    ist_typ(variable, typ);
-    int typ_ganzzahl = 0;
-    typ_ganzzahl = (strcmp (typ, "ganzzahl") == 0);
-    if (!typ_ganzzahl) {
-        yyerror("Die Variable muss von Ganzzahl Typ sein");
     }
 }
 
