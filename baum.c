@@ -18,11 +18,23 @@
 #define GANZZAHL_AUSDRUCK 9
 #define GLEITKOMMA_FAKTOR 10
 #define GLEITKOMMA_BEGRIFF 11
-#define GLEITKOMMA_AUSDRUCK 12 // ausdruck = expresion?
-#define AUSDRUCK 13
-#define GANZZAHL_BLATT 14
-#define GLEITKOMMA_BLATT 15
-#define VARIABLE_BLATT 15
+#define GLEITKOMMA_AUSDRUCK 12 
+#define ZEICHEN_FAKTOR 13
+#define ZEICHEN_BEGRIFF 14
+#define ZEICHEN_AUSDRUCK 15 
+#define STRING_FAKTOR 16
+#define STRING_BEGRIFF 17
+#define STRING_AUSDRUCK 18
+#define BOOLEAN_FAKTOR 19
+#define BOOLEAN_BEGRIFF 20
+#define BOOLEAN_AUSDRUCK 21
+#define AUSDRUCK 22 // ausdruck = expresion?
+#define GANZZAHL_BLATT 23
+#define GLEITKOMMA_BLATT 24
+#define VARIABLE_BLATT 25
+#define ZEICHEN_BLATT 26
+#define STRING_BLATT 27
+#define BOOLEAN_BLATT 28
 
 typedef struct knoten_as
 {
@@ -31,7 +43,7 @@ typedef struct knoten_as
     int knotenTyp;
     int ganzzahlWert;
     float gleitkommaWert;
-    char* characterWert;
+    char* zeichenWert;
     char* stringWert;
     char* booleanWert;
     struct knoten_as* linke;
@@ -65,6 +77,39 @@ struct knoten_as* neuen_knoten_gleitkomma (float wert) {
     struct knoten_as* neuenKnoten = (struct knoten_as*) malloc(sizeof(struct knoten_as));
     neuenKnoten->knotenTyp = GLEITKOMMA_BLATT;
     neuenKnoten->gleitkommaWert = wert;
+    neuenKnoten->rechte = 0;
+    neuenKnoten->linke = 0;
+    neuenKnoten->mittel = 0;
+    return neuenKnoten;
+}
+
+struct knoten_as* neuen_knoten_zeichen (char* wert) {
+    struct knoten_as* neuenKnoten = (struct knoten_as*) malloc(sizeof(struct knoten_as));
+    neuenKnoten->knotenTyp = ZEICHEN_BLATT;
+    neuenKnoten->zeichenWert = (char*) malloc(sizeof(char) * 50);
+    strcpy(neuenKnoten->zeichenWert , wert);
+    neuenKnoten->rechte = 0;
+    neuenKnoten->linke = 0;
+    neuenKnoten->mittel = 0;
+    return neuenKnoten;
+}
+
+struct knoten_as* neuen_knoten_string (char* wert) {
+    struct knoten_as* neuenKnoten = (struct knoten_as*) malloc(sizeof(struct knoten_as));
+    neuenKnoten->knotenTyp = STRING_BLATT;
+    neuenKnoten->stringWert = (char*) malloc(sizeof(char) * 50);
+    strcpy(neuenKnoten->stringWert , wert);
+    neuenKnoten->rechte = 0;
+    neuenKnoten->linke = 0;
+    neuenKnoten->mittel = 0;
+    return neuenKnoten;
+}
+
+struct knoten_as* neuen_knoten_boolean (char* wert) {
+    struct knoten_as* neuenKnoten = (struct knoten_as*) malloc(sizeof(struct knoten_as));
+    neuenKnoten->knotenTyp = BOOLEAN_BLATT;
+    neuenKnoten->booleanWert = (char*) malloc(sizeof(char) * 10);
+    strcpy(neuenKnoten->booleanWert , wert);
     neuenKnoten->rechte = 0;
     neuenKnoten->linke = 0;
     neuenKnoten->mittel = 0;

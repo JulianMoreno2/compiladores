@@ -1,0 +1,15 @@
+Diese Falle funktionieren korrekt:
+
+main{ganzzahl a; a=2;} -> Si
+main{gleitkomma a; a=2.1;} -> Si
+main{ganzzahl a; ganzzahl b; a=2; b=a;} -> Si
+main{ganzzahl a; ganzzahl b; a=2; b=a+3;} -> Si
+main{gleitkomma a; gleitkomma b; a=2.1; b=a;} -> Si
+main{gleitkomma a; gleitkomma b; a=2.1; b=a+3.2;} -> Si
+main{ganzzahl a; ganzzahl b; ganzzahl c; a=2; b=3; c=a+b;} -> Si
+main{gleitkomma a; gleitkomma b; gleitkomma c; a=2.1; b=3.1; c=a+b;} -> Si
+main{gleitkomma a; ganzzahl b; gleitkomma c; a=2.1; b=3; c=a+b;}  -> Si
+main{zeichen a; a="H";} -> Si
+main{string a; a="Hallo";} -> Si
+main{boolean a; a=richtig;} -> Si
+main{boolean a; a=falsch;} -> Si
