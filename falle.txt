@@ -13,3 +13,8 @@ main{zeichen a; a="H";} -> Si
 main{string a; a="Hallo";} -> Si
 main{boolean a; a=richtig;} -> Si
 main{boolean a; a=falsch;} -> Si
+
+---
+main{ganzzahl a; ganzzahl b; ganzzahl c; a=2; b=3; c=b-a;}
+main{ganzzahl a; ganzzahl b; ganzzahl c; a=2; b=3; c=a*b;}
+main{ganzzahl a; ganzzahl b; ganzzahl c; a=2; b=3; c=a/b;}

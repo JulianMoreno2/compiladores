@@ -194,7 +194,7 @@ VARIABLE GLEICH VARIABLE ZEILENENDE {
   $$ = neuen_knoten_ausdruck(AUFGABE, "=", variable_blatt, v_dos);  
 } |
 VARIABLE GLEICH VARIABLE SUMME VARIABLE ZEILENENDE {
-  printf("--> VARIABLE=VARIABLE+VARIABLE;\n");
+  printf("--> VARIABLE = VARIABLE + VARIABLE;\n");
 
   existieren_kontatieren($1);
   existieren_kontatieren($3);
@@ -210,7 +210,61 @@ VARIABLE GLEICH VARIABLE SUMME VARIABLE ZEILENENDE {
   knoten_as* summe = neuen_knoten_ausdruck(AUSDRUCK, "+", v_dos, v_tres);
 
   $$ = neuen_knoten_ausdruck(AUFGABE, "=", variable_blatt, summe);
-} | 
+} |
+VARIABLE GLEICH VARIABLE SUBSTRAKTION VARIABLE ZEILENENDE {
+  printf("--> VARIABLE = VARIABLE - VARIABLE;\n");
+
+  existieren_kontatieren($1);
+  existieren_kontatieren($3);
+  existieren_kontatieren($5);
+  typen_vergleichen($1, $3);
+  typen_vergleichen($1, $5);
+  // mehrere_variables_vergleichen($1, $3, $5);
+  // mehrere -> varias
+
+  knoten_as* variable_blatt = neuen_knoten_variable($1);
+  knoten_as* v_dos = neuen_knoten_variable($3);
+  knoten_as* v_tres = neuen_knoten_variable($5);
+  knoten_as* substraktion = neuen_knoten_ausdruck(AUSDRUCK, "-", v_dos, v_tres);
+
+  $$ = neuen_knoten_ausdruck(AUFGABE, "=", variable_blatt, substraktion);
+} |
+VARIABLE GLEICH VARIABLE MULTIPLIKATION VARIABLE ZEILENENDE {
+  printf("--> VARIABLE = VARIABLE * VARIABLE;\n");
+
+  existieren_kontatieren($1);
+  existieren_kontatieren($3);
+  existieren_kontatieren($5);
+  typen_vergleichen($1, $3);
+  typen_vergleichen($1, $5);
+  // mehrere_variables_vergleichen($1, $3, $5);
+  // mehrere -> varias
+
+  knoten_as* variable_blatt = neuen_knoten_variable($1);
+  knoten_as* v_dos = neuen_knoten_variable($3);
+  knoten_as* v_tres = neuen_knoten_variable($5);
+  knoten_as* multiplikation = neuen_knoten_ausdruck(AUSDRUCK, "*", v_dos, v_tres);
+
+  $$ = neuen_knoten_ausdruck(AUFGABE, "=", variable_blatt, multiplikation);
+} |
+VARIABLE GLEICH VARIABLE DIVISION VARIABLE ZEILENENDE {
+  printf("--> VARIABLE = VARIABLE / VARIABLE;\n");
+
+  existieren_kontatieren($1);
+  existieren_kontatieren($3);
+  existieren_kontatieren($5);
+  typen_vergleichen($1, $3);
+  typen_vergleichen($1, $5);
+  // mehrere_variables_vergleichen($1, $3, $5);
+  // mehrere -> varias
+
+  knoten_as* variable_blatt = neuen_knoten_variable($1);
+  knoten_as* v_dos = neuen_knoten_variable($3);
+  knoten_as* v_tres = neuen_knoten_variable($5);
+  knoten_as* division = neuen_knoten_ausdruck(AUSDRUCK, "/", v_dos, v_tres);
+
+  $$ = neuen_knoten_ausdruck(AUFGABE, "=", variable_blatt, division);
+} |
 VARIABLE GLEICH ZEICHEN ZEILENENDE {  
   printf("--> VARIABLE=ZEICHEN;\n");
 
