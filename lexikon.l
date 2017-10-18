@@ -51,7 +51,7 @@ boolean       "boolean"
 "-"           {return SUBSTRAKTION;}
 "*"           {return MULTIPLIKATION;}
 "/"           {return DIVISION;}
-"&"           {return UND;}
+"&&"          {return UND;}
 "||"          {return ODER;}
 "!"           {return NICHT;}
 

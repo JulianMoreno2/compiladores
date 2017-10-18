@@ -1,20 +1,56 @@
 Diese Falle funktionieren korrekt:
 
-main{ganzzahl a; a=2;} -> Si
-main{gleitkomma a; a=2.1;} -> Si
-main{ganzzahl a; ganzzahl b; a=2; b=a;} -> Si
-main{ganzzahl a; ganzzahl b; a=2; b=a+3;} -> Si
-main{gleitkomma a; gleitkomma b; a=2.1; b=a;} -> Si
-main{gleitkomma a; gleitkomma b; a=2.1; b=a+3.2;} -> Si
-main{ganzzahl a; ganzzahl b; ganzzahl c; a=2; b=3; c=a+b;} -> Si
-main{gleitkomma a; gleitkomma b; gleitkomma c; a=2.1; b=3.1; c=a+b;} -> Si
-main{gleitkomma a; ganzzahl b; gleitkomma c; a=2.1; b=3; c=a+b;}  -> Si
-main{zeichen a; a="H";} -> Si
-main{string a; a="Hallo";} -> Si
-main{boolean a; a=richtig;} -> Si
-main{boolean a; a=falsch;} -> Si
+main{ganzzahl a; a=2;}
+main{gleitkomma a; a=2.1;}
+main{ganzzahl a; ganzzahl b; a=2; b=a;}
+main{ganzzahl a; ganzzahl b; a=2; b=a+3;}
+main{gleitkomma a; gleitkomma b; a=2.1; b=a;}
+main{gleitkomma a; gleitkomma b; a=2.1; b=a+3.2;}
+main{ganzzahl a; ganzzahl b; ganzzahl c; a=2; b=3; c=a+b;}
+main{gleitkomma a; gleitkomma b; gleitkomma c; a=2.1; b=3.1; c=a+b;}
+main{gleitkomma a; ganzzahl b; gleitkomma c; a=2.1; b=3; c=a+b;}
 
----
+main{zeichen a; a="H";}
+main{string a; a="Hallo";}
+main{boolean a; a=richtig;}
+main{boolean a; a=falsch;}
+
 main{ganzzahl a; ganzzahl b; ganzzahl c; a=2; b=3; c=b-a;}
 main{ganzzahl a; ganzzahl b; ganzzahl c; a=2; b=3; c=a*b;}
 main{ganzzahl a; ganzzahl b; ganzzahl c; a=2; b=3; c=a/b;}
+
+main{ganzzahl a; wenn(2>1){a=2;}}
+main{ganzzahl a; wenn(2<1){a=2;}}
+main{ganzzahl a; wenn(2==2){a=2;}}
+main{ganzzahl a; wenn(2!=1){a=2;}}
+main{ganzzahl a; wenn(2>=1){a=2;}}
+main{ganzzahl a; wenn(1<=2){a=2;}}
+
+main{ganzzahl a; a=2; wenn(a>1){a=2;}}
+main{ganzzahl a; a=2; wenn(a<3){a=2;}}
+main{ganzzahl a; a=2; wenn(a==2){a=2;}}
+main{ganzzahl a; a=2; wenn(a!=1){a=2;}}
+main{ganzzahl a; a=2; wenn(a>=1){a=2;}}
+main{ganzzahl a; a=2; wenn(a<=3){a=2;}}
+
+main{ganzzahl a; a=2; wenn(3>a){a=2;}}
+main{ganzzahl a; a=2; wenn(1<a){a=2;}}
+main{ganzzahl a; a=2; wenn(2==a){a=2;}}
+main{ganzzahl a; a=2; wenn(1!=a){a=2;}}
+main{ganzzahl a; a=2; wenn(3>=a){a=2;}}
+main{ganzzahl a; a=2; wenn(1<=a){a=2;}}
+
+main{ganzzahl a; a=2; ganzzahl b; b=3; wenn(a>b){a=2;}}
+main{ganzzahl a; a=2; ganzzahl b; b=3; wenn(a<b){a=2;}}
+main{ganzzahl a; a=2; ganzzahl b; b=3; wenn(a==b){a=2;}}
+main{ganzzahl a; a=2; ganzzahl b; b=3; wenn(a!=b){a=2;}}
+main{ganzzahl a; a=2; ganzzahl b; b=3; wenn(a>=b){a=2;}}
+main{ganzzahl a; a=2; ganzzahl b; b=3; wenn(a<=b){a=2;}}
+
+main{ganzzahl a; boolean b; b=richtig; wenn(b){a=2;}}
+main{ganzzahl a; boolean b; b=richtig; wenn(!b){a=2;}}
+main{ganzzahl a; boolean b; b=richtig; boolean c; c=richtig; wenn(b&&c){a=2;}}
+main{ganzzahl a; boolean b; b=richtig; boolean c; c=richtig; wenn(b||c){a=2;}}
+
+main{ganzzahl a; boolean b; b=richtig; wenn(b){a=2;}sonnst{a=3;}}
+main{ganzzahl a; boolean b; b=richtig; wahrend(b){a=2; b=falsch;}}

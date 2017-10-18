@@ -35,6 +35,10 @@
 #define ZEICHEN_BLATT 26
 #define STRING_BLATT 27
 #define BOOLEAN_BLATT 28
+#define URTEIL_WENN 29
+#define URTEIL_WAHREND 30
+#define BEDINGUNG 31 // condicion?
+
 
 typedef struct knoten_as
 {
@@ -125,6 +129,28 @@ struct knoten_as* neuen_knoten_variable(char* variable)
     neuenKnoten->mittel = 0;
     neuenKnoten->rechte = 0;
     neuenKnoten->linke = 0;
+    return neuenKnoten;
+}
+
+struct knoten_as* neuen_knoten_wenn(struct knoten_as* bedingung, struct knoten_as* mittel, struct knoten_as* rechte)
+{
+    struct knoten_as* neuenKnoten = (struct knoten_as*) malloc(sizeof(struct knoten_as));
+    neuenKnoten->operatore = 0;
+    neuenKnoten->knotenTyp = URTEIL_WENN;
+    neuenKnoten->linke = bedingung;
+    neuenKnoten->mittel = mittel;
+    neuenKnoten->rechte = rechte;
+    return neuenKnoten;
+}
+
+struct knoten_as* neuen_knoten_wahrend(struct knoten_as* bedingung, struct knoten_as* korper)
+{
+    struct knoten_as* neuenKnoten = (struct knoten_as*) malloc(sizeof(struct knoten_as));
+    neuenKnoten->operatore = 0;
+    neuenKnoten->knotenTyp = URTEIL_WAHREND;
+    neuenKnoten->linke = bedingung;
+    neuenKnoten->mittel = 0;
+    neuenKnoten->rechte = korper;
     return neuenKnoten;
 }
 

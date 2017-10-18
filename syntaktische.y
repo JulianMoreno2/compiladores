@@ -46,6 +46,7 @@ int yyerror(const char *nachricht) { printf("Syntax-Fehler: %s\n", nachricht);}
 %token MULTIPLIKATION
 %token DIVISION
 %token AUFGABE
+%token BEDINGUNG
 %token UND
 %token ODER
 %token NICHT
@@ -68,6 +69,10 @@ int yyerror(const char *nachricht) { printf("Syntax-Fehler: %s\n", nachricht);}
 %type <baum> ganzzahl_ausdruck ganzzahl_begriff
 
 %type <baum> gemischte_summe gemischte_ausdruck
+
+%type <baum> wenn_urteil bedingung wahrend_urteil
+
+//Bedingung = BEDINGUNG?
 
 %%
 
@@ -92,6 +97,8 @@ urteil: aussage {$$ = $1;}
 | gleitkomma_ausdruck {$$ = $1;}
 | ganzzahl_ausdruck {$$ = $1;}
 | gemischte_summe {$$ = $1;}
+| wenn_urteil {$$ = $1;}
+| wahrend_urteil {$$ = $1;}
 
 //---------------------------
 
@@ -188,10 +195,10 @@ VARIABLE GLEICH VARIABLE ZEILENENDE {
   existieren_kontatieren($1);
   existieren_kontatieren($3);
   knoten_as* variable_blatt = neuen_knoten_variable($1);
-  knoten_as* v_dos = neuen_knoten_variable($3);
+  knoten_as* v_zwei = neuen_knoten_variable($3);
   typen_vergleichen($1, $3);
 
-  $$ = neuen_knoten_ausdruck(AUFGABE, "=", variable_blatt, v_dos);  
+  $$ = neuen_knoten_ausdruck(AUFGABE, "=", variable_blatt, v_zwei);  
 } |
 VARIABLE GLEICH VARIABLE SUMME VARIABLE ZEILENENDE {
   printf("--> VARIABLE = VARIABLE + VARIABLE;\n");
@@ -205,9 +212,9 @@ VARIABLE GLEICH VARIABLE SUMME VARIABLE ZEILENENDE {
   // mehrere -> varias
 
   knoten_as* variable_blatt = neuen_knoten_variable($1);
-  knoten_as* v_dos = neuen_knoten_variable($3);
-  knoten_as* v_tres = neuen_knoten_variable($5);
-  knoten_as* summe = neuen_knoten_ausdruck(AUSDRUCK, "+", v_dos, v_tres);
+  knoten_as* v_zwei = neuen_knoten_variable($3);
+  knoten_as* v_drei = neuen_knoten_variable($5);
+  knoten_as* summe = neuen_knoten_ausdruck(AUSDRUCK, "+", v_zwei, v_drei);
 
   $$ = neuen_knoten_ausdruck(AUFGABE, "=", variable_blatt, summe);
 } |
@@ -223,9 +230,9 @@ VARIABLE GLEICH VARIABLE SUBSTRAKTION VARIABLE ZEILENENDE {
   // mehrere -> varias
 
   knoten_as* variable_blatt = neuen_knoten_variable($1);
-  knoten_as* v_dos = neuen_knoten_variable($3);
-  knoten_as* v_tres = neuen_knoten_variable($5);
-  knoten_as* substraktion = neuen_knoten_ausdruck(AUSDRUCK, "-", v_dos, v_tres);
+  knoten_as* v_zwei = neuen_knoten_variable($3);
+  knoten_as* v_drei = neuen_knoten_variable($5);
+  knoten_as* substraktion = neuen_knoten_ausdruck(AUSDRUCK, "-", v_zwei, v_drei);
 
   $$ = neuen_knoten_ausdruck(AUFGABE, "=", variable_blatt, substraktion);
 } |
@@ -241,9 +248,9 @@ VARIABLE GLEICH VARIABLE MULTIPLIKATION VARIABLE ZEILENENDE {
   // mehrere -> varias
 
   knoten_as* variable_blatt = neuen_knoten_variable($1);
-  knoten_as* v_dos = neuen_knoten_variable($3);
-  knoten_as* v_tres = neuen_knoten_variable($5);
-  knoten_as* multiplikation = neuen_knoten_ausdruck(AUSDRUCK, "*", v_dos, v_tres);
+  knoten_as* v_zwei = neuen_knoten_variable($3);
+  knoten_as* v_drei = neuen_knoten_variable($5);
+  knoten_as* multiplikation = neuen_knoten_ausdruck(AUSDRUCK, "*", v_zwei, v_drei);
 
   $$ = neuen_knoten_ausdruck(AUFGABE, "=", variable_blatt, multiplikation);
 } |
@@ -259,9 +266,9 @@ VARIABLE GLEICH VARIABLE DIVISION VARIABLE ZEILENENDE {
   // mehrere -> varias
 
   knoten_as* variable_blatt = neuen_knoten_variable($1);
-  knoten_as* v_dos = neuen_knoten_variable($3);
-  knoten_as* v_tres = neuen_knoten_variable($5);
-  knoten_as* division = neuen_knoten_ausdruck(AUSDRUCK, "/", v_dos, v_tres);
+  knoten_as* v_zwei = neuen_knoten_variable($3);
+  knoten_as* v_drei = neuen_knoten_variable($5);
+  knoten_as* division = neuen_knoten_ausdruck(AUSDRUCK, "/", v_zwei, v_drei);
 
   $$ = neuen_knoten_ausdruck(AUFGABE, "=", variable_blatt, division);
 } |
@@ -364,6 +371,206 @@ GANZZAHL {
   printf("--> GANZZAHL\n");
   $$ = neuen_knoten_ganzzahl($1);
 }
+
+wenn_urteil:
+WENN KLAMMER_OFFEN bedingung KLAMMER_SCHLIESSEN SCHLUOFFEN korper SCHLUSCHLIESSEN {
+  printf("--> WENN\n");
+  $$ = neuen_knoten_wenn($3,$6,0);
+} |
+WENN KLAMMER_OFFEN bedingung KLAMMER_SCHLIESSEN SCHLUOFFEN korper SCHLUSCHLIESSEN SONNST SCHLUOFFEN korper SCHLUSCHLIESSEN {
+  printf("--> WENN -- SONNST\n");
+  $$ = neuen_knoten_wenn($3,$6,$10);
+}
+                
+wahrend_urteil:
+WAHREND KLAMMER_OFFEN bedingung KLAMMER_SCHLIESSEN SCHLUOFFEN korper SCHLUSCHLIESSEN {
+  printf("--> WAHREND\n");
+  $$ = neuen_knoten_wahrend($3,$6);
+}
+
+ausdruck:
+ganzzahl_ausdruck {
+  $$ = $1;
+} |
+gleitkomma_ausdruck {
+  $$ = $1;
+} |
+gemischte_ausdruck {
+  $$ = $1;
+}
+
+bedingung:
+ausdruck UND ausdruck {
+  printf("--> BEDINGUNG: ausdruck AND ausdruck;\n");
+  $$ = neuen_knoten_ausdruck(BEDINGUNG,"&&",$1,$3);
+} |
+ausdruck ODER ausdruck {
+  printf("--> BEDINGUNG: ausdruck ODER ausdruck;\n");
+  $$ = neuen_knoten_ausdruck(BEDINGUNG,"||",$1,$3);
+} | 
+ausdruck UNGLEICH ausdruck {
+  printf("--> BEDINGUNG: ausdruck UNGLEICH ausdruck;\n");
+  $$ = neuen_knoten_ausdruck(BEDINGUNG,"!=",$1,$3);
+} | 
+ausdruck GLEICH_GLEICH ausdruck {
+  printf("--> BEDINGUNG: ausdruck GLEICH_GLEICH ausdruck;\n");
+  $$ = neuen_knoten_ausdruck(BEDINGUNG,"==",$1,$3);
+} |
+ausdruck GROSSER ausdruck {
+  printf("--> BEDINGUNG: ausdruck GROSSER ausdruck;\n");
+  $$ = neuen_knoten_ausdruck(BEDINGUNG,">",$1,$3);
+} |
+ausdruck KLEINER ausdruck {
+  printf("--> BEDINGUNG: ausdruck KLEINER ausdruck;\n");
+  $$ = neuen_knoten_ausdruck(BEDINGUNG,"<",$1,$3);
+} |
+ausdruck GROSSER_GLEICH ausdruck {
+  printf("--> BEDINGUNG: ausdruck GROSSER_GLEICH ausdruck;\n");
+  $$ = neuen_knoten_ausdruck(BEDINGUNG,">=",$1,$3);
+} |
+ausdruck KLEINER_GLEICH ausdruck {
+  printf("--> BEDINGUNG: ausdruck KLEINER_GLEICH ausdruck;\n");
+  $$ = neuen_knoten_ausdruck(BEDINGUNG,"<=",$1,$3);
+} |
+ausdruck UND VARIABLE {
+  printf("--> BEDINGUNG: ausdruck UND VARIABLE;\n");
+  knoten_as* variable = neuen_knoten_variable($3);
+  $$ = neuen_knoten_ausdruck(BEDINGUNG,"&&",$1,variable);
+} |
+ausdruck ODER VARIABLE {
+  printf("--> BEDINGUNG: ausdruck ODER VARIABLE;\n");
+  knoten_as* variable = neuen_knoten_variable($3);
+  $$ = neuen_knoten_ausdruck(BEDINGUNG,"||",$1,variable);
+} |
+ausdruck UNGLEICH VARIABLE {
+  printf("--> BEDINGUNG: ausdruck UNGLEICH VARIABLE;\n");
+  knoten_as* variable = neuen_knoten_variable($3);
+  $$ = neuen_knoten_ausdruck(BEDINGUNG,"!=",$1,variable);
+} |
+ausdruck GLEICH_GLEICH VARIABLE {
+  printf("--> BEDINGUNG: ausdruck GLEICH_GLEICH VARIABLE;\n");
+  knoten_as* variable = neuen_knoten_variable($3);
+  $$ = neuen_knoten_ausdruck(BEDINGUNG,"==",$1,variable);
+} |
+ausdruck GROSSER VARIABLE {
+  printf("--> BEDINGUNG: ausdruck GROSSER VARIABLE;\n");
+  knoten_as* variable = neuen_knoten_variable($3);
+  $$ = neuen_knoten_ausdruck(BEDINGUNG,">",$1,variable);
+} |
+ausdruck KLEINER VARIABLE {
+  printf("--> BEDINGUNG: ausdruck KLEINER VARIABLE;\n");
+  knoten_as* variable = neuen_knoten_variable($3);
+  $$ = neuen_knoten_ausdruck(BEDINGUNG,"<",$1,variable);
+} |
+ausdruck GROSSER_GLEICH VARIABLE {
+  printf("--> BEDINGUNG: ausdruck GROSSER_GLEICH VARIABLE;\n");
+  knoten_as* variable = neuen_knoten_variable($3);
+  $$ = neuen_knoten_ausdruck(BEDINGUNG,">=",$1,variable);
+} |
+ausdruck KLEINER_GLEICH VARIABLE {
+  printf("--> BEDINGUNG: ausdruck KLEINER_GLEICH VARIABLE;\n");
+  knoten_as* variable = neuen_knoten_variable($3);
+  $$ = neuen_knoten_ausdruck(BEDINGUNG,"<",$1,variable);
+} |
+NICHT VARIABLE {
+  printf("--> BEDINGUNG: NICHT VARIABLE;\n");
+  knoten_as* variable = neuen_knoten_variable($2);
+  $$ = neuen_knoten_ausdruck(BEDINGUNG,"!",0,variable);
+} |
+VARIABLE {
+  printf("--> BEDINGUNG: VARIABLE;\n");
+  knoten_as* variable = neuen_knoten_variable($1);
+  $$ = neuen_knoten_ausdruck(BEDINGUNG,"",0,variable);
+} |
+VARIABLE UND ausdruck {
+  printf("--> BEDINGUNG: VARIABLE UND ausdruck;\n");
+  knoten_as* variable = neuen_knoten_variable($1);
+  $$ = neuen_knoten_ausdruck(BEDINGUNG,"&&",variable,$3);
+} |
+VARIABLE ODER ausdruck {
+  printf("--> BEDINGUNG: VARIABLE ODER ausdruck;\n");
+  knoten_as* variable = neuen_knoten_variable($1);
+  $$ = neuen_knoten_ausdruck(BEDINGUNG,"||",variable,$3);
+} |
+VARIABLE UNGLEICH ausdruck {
+  printf("--> BEDINGUNG: VARIABLE UNGLEICH ausdruck;\n");
+  knoten_as* variable = neuen_knoten_variable($1);
+  $$ = neuen_knoten_ausdruck(BEDINGUNG,"!=",variable,$3);
+} |
+VARIABLE GLEICH_GLEICH ausdruck {
+  printf("--> BEDINGUNG: VARIABLE GLEICH_GLEICH ausdruck;\n");
+  knoten_as* variable = neuen_knoten_variable($1);
+  $$ = neuen_knoten_ausdruck(BEDINGUNG,"==",variable,$3);
+} |
+VARIABLE GROSSER ausdruck {
+  printf("--> BEDINGUNG: VARIABLE GROSSER ausdruck;\n");
+  knoten_as* variable = neuen_knoten_variable($1);
+  $$ = neuen_knoten_ausdruck(BEDINGUNG,">",variable,$3);
+} |
+VARIABLE KLEINER ausdruck {
+  printf("--> BEDINGUNG: VARIABLE KLEINER ausdruck;\n");
+  knoten_as* variable = neuen_knoten_variable($1);
+  $$ = neuen_knoten_ausdruck(BEDINGUNG,"<",variable,$3);
+} |
+VARIABLE GROSSER_GLEICH ausdruck {
+  printf("--> BEDINGUNG: VARIABLE GROSSER_GLEICH ausdruck;\n");
+  knoten_as* variable = neuen_knoten_variable($1);
+  $$ = neuen_knoten_ausdruck(BEDINGUNG,">=",variable,$3);
+} |
+VARIABLE KLEINER_GLEICH ausdruck {
+  printf("--> BEDINGUNG: VARIABLE KLEINER_GLEICH ausdruck;\n");
+  knoten_as* variable = neuen_knoten_variable($1);
+  $$ = neuen_knoten_ausdruck(BEDINGUNG,"<=",variable,$3);
+} | 
+VARIABLE UND VARIABLE {   
+  printf("--> BEDINGUNG: VARIABLE UND VARIABLE;\n");
+  knoten_as* variable = neuen_knoten_variable($1);
+  knoten_as* v_zwei = neuen_knoten_variable($3);
+  $$ = neuen_knoten_ausdruck(BEDINGUNG,"&&",variable,v_zwei);
+} |
+VARIABLE ODER VARIABLE {
+  printf("--> BEDINGUNG: VARIABLE ODER VARIABLE;\n");
+  knoten_as* variable = neuen_knoten_variable($1);
+  knoten_as* v_zwei = neuen_knoten_variable($3);
+  $$ = neuen_knoten_ausdruck(BEDINGUNG,"||",variable,v_zwei);
+} |
+VARIABLE UNGLEICH VARIABLE {  
+  printf("--> BEDINGUNG: VARIABLE UNGLEICH VARIABLE;\n");
+  knoten_as* variable = neuen_knoten_variable($1);
+  knoten_as* v_zwei = neuen_knoten_variable($3);
+  $$ = neuen_knoten_ausdruck(BEDINGUNG,"!=",variable,v_zwei);
+} |
+VARIABLE GLEICH_GLEICH VARIABLE {
+  printf("--> BEDINGUNG: VARIABLE GLEICH_GLEICH VARIABLE;\n");
+  knoten_as* variable = neuen_knoten_variable($1);
+  knoten_as* v_zwei = neuen_knoten_variable($3);
+  $$ = neuen_knoten_ausdruck(BEDINGUNG,"==",variable,v_zwei);
+} |
+VARIABLE GROSSER VARIABLE {
+  printf("--> BEDINGUNG: VARIABLE GROSSER VARIABLE;\n");
+  knoten_as* variable = neuen_knoten_variable($1);
+  knoten_as* v_zwei = neuen_knoten_variable($3);
+  $$ = neuen_knoten_ausdruck(BEDINGUNG,">",variable,v_zwei);
+} |
+VARIABLE KLEINER VARIABLE {
+  printf("--> BEDINGUNG: VARIABLE KLEINER VARIABLE;\n");
+  knoten_as* variable = neuen_knoten_variable($1);
+  knoten_as* v_zwei = neuen_knoten_variable($3);
+  $$ = neuen_knoten_ausdruck(BEDINGUNG,"<",variable,v_zwei);
+} |
+VARIABLE GROSSER_GLEICH VARIABLE {
+  printf("--> BEDINGUNG: VARIABLE GROSSER_GLEICH VARIABLE;\n");
+  knoten_as* variable = neuen_knoten_variable($1);
+  knoten_as* v_zwei = neuen_knoten_variable($3);
+  $$ = neuen_knoten_ausdruck(BEDINGUNG,">=",variable,v_zwei);
+} |
+VARIABLE KLEINER_GLEICH VARIABLE {
+  printf("--> BEDINGUNG: VARIABLE KLEINER_GLEICH VARIABLE;\n");
+  knoten_as* variable = neuen_knoten_variable($1);
+  knoten_as* v_zwei = neuen_knoten_variable($3);
+  $$ = neuen_knoten_ausdruck(BEDINGUNG,"<=",variable,v_zwei);
+}              
+;
 
 %%
 

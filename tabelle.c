@@ -37,7 +37,7 @@ int existieren (symbol variable_eingegeben) {
 void existieren_kontatieren (symbol variable) {
     printf("existieren_kontatieren\n");
     if (!existieren(variable)) {
-        yyerror("Variable not definiten.\n");
+        yyerror("Variable nicht definiten.\n");
     }
 }
 
@@ -113,35 +113,35 @@ int ist_boolean (symbol variable) {
 void ganzzahl_kontatieren (symbol variable) {
     printf("ganzzahl_kontatieren\n");
     if (!ist_ganzzahl(variable)) {
-        yyerror("Variable not ist ganzzahl.\n");
+        yyerror("Variable nicht ist ganzzahl.\n");
     }
 }
 
 void gleitkomma_kontatieren (symbol variable) {
     printf("gleitkomma_kontatieren\n");
     if (!ist_gleitkomma(variable)) {
-        yyerror("Variable not ist gleitkomma.\n");
+        yyerror("Variable nicht ist gleitkomma.\n");
     }
 }
 
 void zeichen_kontatieren (symbol variable) {
     printf("zeichen_kontatieren\n");
     if (!ist_zeichen(variable)) {
-        yyerror("Variable not ist zeichen.\n");
+        yyerror("Variable nicht ist zeichen.\n");
     }
 }
 
 void string_kontatieren (symbol variable) {
     printf("string_kontatieren\n");
     if (!ist_string(variable)) {
-        yyerror("Variable not ist string.\n");
+        yyerror("Variable nicht ist string.\n");
     }
 }
 
 void boolean_kontatieren (symbol variable) {
     printf("boolean_kontatieren\n");
     if (!ist_boolean(variable)) {
-        yyerror("Variable not ist boolean.\n");
+        yyerror("Variable nicht ist boolean.\n");
     }
 }
 
