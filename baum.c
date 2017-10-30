@@ -35,10 +35,11 @@
 #define ZEICHEN_BLATT 26
 #define STRING_BLATT 27
 #define BOOLEAN_BLATT 28
-#define URTEIL_WENN 29
-#define URTEIL_WAHREND 30
+#define WENN_URTEIL 29
+#define WAHREND_URTEIL 30
 #define BEDINGUNG 31 // condicion?
-
+#define FUR_URTEIL 32
+#define FUR_AUSDRUCK 33
 
 typedef struct knoten_as
 {
@@ -136,7 +137,7 @@ struct knoten_as* neuen_knoten_wenn(struct knoten_as* bedingung, struct knoten_a
 {
     struct knoten_as* neuenKnoten = (struct knoten_as*) malloc(sizeof(struct knoten_as));
     neuenKnoten->operatore = 0;
-    neuenKnoten->knotenTyp = URTEIL_WENN;
+    neuenKnoten->knotenTyp = WENN_URTEIL;
     neuenKnoten->linke = bedingung;
     neuenKnoten->mittel = mittel;
     neuenKnoten->rechte = rechte;
@@ -147,11 +148,33 @@ struct knoten_as* neuen_knoten_wahrend(struct knoten_as* bedingung, struct knote
 {
     struct knoten_as* neuenKnoten = (struct knoten_as*) malloc(sizeof(struct knoten_as));
     neuenKnoten->operatore = 0;
-    neuenKnoten->knotenTyp = URTEIL_WAHREND;
+    neuenKnoten->knotenTyp = WAHREND_URTEIL;
     neuenKnoten->linke = bedingung;
     neuenKnoten->mittel = 0;
     neuenKnoten->rechte = korper;
     return neuenKnoten;
 }
+
+struct knoten_as* neuen_knoten_fur(struct knoten_as* fur_asdruck, struct knoten_as* korper)
+{
+    struct knoten_as* neuenKnoten = (struct knoten_as*) malloc(sizeof(struct knoten_as));
+    neuenKnoten->operatore = 0;
+    neuenKnoten->knotenTyp = FUR_URTEIL;
+    neuenKnoten->linke = fur_asdruck;
+    neuenKnoten->mittel = 0;
+    neuenKnoten->rechte = korper;
+    return neuenKnoten;
+}
+
+struct knoten_as* neuen_knoten_fur_ausdruck(struct knoten_as* ganzzahl_ausdruck, struct knoten_as* bedingung, struct knoten_as* summe_ausdruck)
+{
+    struct knoten_as* neuenKnoten = (struct knoten_as*) malloc(sizeof(struct knoten_as));
+    neuenKnoten->operatore = 0;
+    neuenKnoten->knotenTyp = FUR_AUSDRUCK;
+    neuenKnoten->linke = ganzzahl_ausdruck;
+    neuenKnoten->mittel = bedingung;
+    neuenKnoten->rechte = summe_ausdruck;
+    return neuenKnoten;
+};
 
 #endif /* BAUM_C */

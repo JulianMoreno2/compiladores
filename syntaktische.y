@@ -55,6 +55,7 @@ int yyerror(const char *nachricht) { printf("Syntax-Fehler: %s\n", nachricht);}
 %token WENN
 %right SONNST
 %token WAHREND
+%token FUR
 %token <variable> ZEICHEN
 %token <variable> BOOLEAN
 %token <variable> VARIABLE
@@ -70,7 +71,7 @@ int yyerror(const char *nachricht) { printf("Syntax-Fehler: %s\n", nachricht);}
 
 %type <baum> gemischte_summe gemischte_ausdruck
 
-%type <baum> wenn_urteil bedingung wahrend_urteil fur_urteil
+%type <baum> wenn_urteil bedingung wahrend_urteil fur_urteil fur_ausdruck
 
 //Bedingung = Condicion 
 
@@ -392,14 +393,43 @@ WAHREND KLAMMER_OFFEN bedingung KLAMMER_SCHLIESSEN SCHLUOFFEN korper SCHLUSCHLIE
 
 fur_urteil:
 FUR KLAMMER_OFFEN fur_ausdruck KLAMMER_SCHLIESSEN SCHLUOFFEN korper SCHLUSCHLIESSEN {
-
+  printf("--> FUR\n");
+  $$ = neuen_knoten_fur($3,$6);
 }
 
-
 fur_ausdruck:
-DEFGANZZAHL VARIABLE ZEILENENDE VARIABLE GLEICH ganzzahl ZEILENENDE VARIABLE KLEINER ganzzahl ZEILENENDE VARIABLE GLEICH VARIABLE SUMME ganzzahl ZEILENENDE {
+DEFGANZZAHL VARIABLE ZEILENENDE VARIABLE GLEICH GANZZAHL ZEILENENDE VARIABLE KLEINER GANZZAHL ZEILENENDE VARIABLE GLEICH VARIABLE SUMME GANZZAHL ZEILENENDE {
+  printf("--> DEFGANZZAHL\n");
+  if (!existieren($2)) {
+    hinzufugen($1, $2);
+  } else{
+    yyerror("Variable existieren.");
+  }
 
-} 
+  printf("--> VARIABLE = ganzzahl_ausdruck;\n");
+  existieren_kontatieren($4);
+  ganzzahl_kontatieren($4);
+  knoten_as* variable_blatt = neuen_knoten_variable($4);
+  knoten_as* ganzzahl_blatt = neuen_knoten_ganzzahl($6);
+  knoten_as* ganzzahl_ausdruck = neuen_knoten_ausdruck(AUFGABE, "=", variable_blatt, ganzzahl_blatt);
+
+  printf("--> BEDINGUNG: VARIABLE KLEINER ganzzahl;\n");
+  existieren_kontatieren($8);
+  knoten_as* variable_bedingung = neuen_knoten_variable($8);
+  knoten_as* ganzzahl_bedingung = neuen_knoten_ganzzahl($16);
+  knoten_as* bedingung = neuen_knoten_ausdruck(BEDINGUNG,"<",variable_bedingung,ganzzahl_bedingung);
+  
+  printf("--> VARIABLE = VARIABLE + ganzzahl_begriff;\n");
+  existieren_kontatieren($12);
+  ganzzahl_kontatieren($12);
+  existieren_kontatieren($14);
+  ganzzahl_kontatieren($14);  
+  knoten_as* variable_blatt_2 = neuen_knoten_variable($14);
+  knoten_as* ganzzahl_blatt_2 = neuen_knoten_ganzzahl($16);
+  knoten_as* summe_ausdruck = neuen_knoten_ausdruck(GANZZAHL_AUSDRUCK ,"+" , variable_blatt_2, ganzzahl_blatt_2);
+
+  $$ = neuen_knoten_fur_ausdruck(ganzzahl_ausdruck, bedingung, summe_ausdruck);
+}
 /*
 |
 DEFGANZZAHL VARIABLE ZEILENENDE VARIABLE GLEICH ganzzahl ZEILENENDE VARIABLE GROSSER ganzzahl ZEILENENDE VARIABLE GLEICH VARIABLE SUBSTRAKTION ganzzahl ZEILENENDE {

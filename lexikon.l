@@ -59,6 +59,7 @@ boolean       "boolean"
 "wenn"        {return WENN;}
 "sonnst"      {return SONNST;}
 "wahrend"     {return WAHREND;}
+"fur"         {return FUR;}
 
 {Ganzzahl}    {yylval.ganzzahl = atoi(yytext);return GANZZAHL;}
 {Gleitkomma}  {yylval.gleitkomma = atof(yytext);return GLEITKOMMA;}
