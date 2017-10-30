@@ -55,6 +55,7 @@ boolean       "boolean"
 "||"          {return ODER;}
 "!"           {return NICHT;}
 
+"generate"    {return GENERATE;}
 "main"        {return MAIN;}
 "wenn"        {return WENN;}
 "sonnst"      {return SONNST;}

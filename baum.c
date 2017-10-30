@@ -175,6 +175,12 @@ struct knoten_as* neuen_knoten_fur_ausdruck(struct knoten_as* ganzzahl_ausdruck,
     neuenKnoten->mittel = bedingung;
     neuenKnoten->rechte = summe_ausdruck;
     return neuenKnoten;
-};
+}
+
+void generate_intermediate_code(void) {
+    printf("Generating intermediate code !!!!!\n");
+}
+
+;
 
 #endif /* BAUM_C */
