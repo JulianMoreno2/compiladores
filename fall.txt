@@ -61,3 +61,4 @@ main{ganzzahl a; boolean b; b=richtig; wenn(b){a=2;}sonnst{wenn(b){a=3;}}}
 main{ganzzahl a; boolean b; b=richtig; wahrend(b){a=2; b=falsch;}}
 
 main{ganzzahl a; a=10; ganzzahl b; fur(ganzzahl c; c = 0; c < 10; c = c + 1;){b=2;}}
+main{ganzzahl a; a=10; ganzzahl b; fur(ganzzahl c; c = 10; c > 5; c = c - 1;){b=2;}}

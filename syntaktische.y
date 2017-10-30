@@ -73,7 +73,7 @@ int yyerror(const char *nachricht) { printf("Syntax-Fehler: %s\n", nachricht);}
 
 %type <baum> wenn_urteil bedingung wahrend_urteil fur_urteil fur_ausdruck
 
-//Bedingung = Condicion 
+//Bedingung = Condicion
 
 %%
 
@@ -93,7 +93,7 @@ korper: urteil korper {
 
 //---------------------------
 
-urteil: 
+urteil:
 aussage {$$ = $1;} |
 aufgabe {$$ = $1;} |
 gleitkomma_ausdruck {$$ = $1;} |
@@ -168,12 +168,12 @@ aufgabe:
 VARIABLE GLEICH gemischte_ausdruck ZEILENENDE {
   printf("--> VARIABLE=gemischte_ausdruck;\n");
 
-  existieren_kontatieren($1); 
+  existieren_kontatieren($1);
   gleitkomma_kontatieren($1);
   knoten_as* variable_blatt = neuen_knoten_variable($1);
 
   $$ = neuen_knoten_ausdruck(AUFGABE, "=", variable_blatt, $3);
-} | 
+} |
 VARIABLE GLEICH gleitkomma_ausdruck ZEILENENDE {
   printf("--> VARIABLE=gleitkomma_ausdruck;\n");
 
@@ -201,7 +201,7 @@ VARIABLE GLEICH VARIABLE ZEILENENDE {
   knoten_as* v_zwei = neuen_knoten_variable($3);
   typen_vergleichen($1, $3);
 
-  $$ = neuen_knoten_ausdruck(AUFGABE, "=", variable_blatt, v_zwei);  
+  $$ = neuen_knoten_ausdruck(AUFGABE, "=", variable_blatt, v_zwei);
 } |
 VARIABLE GLEICH VARIABLE SUMME VARIABLE ZEILENENDE {
   printf("--> VARIABLE = VARIABLE + VARIABLE;\n");
@@ -275,7 +275,7 @@ VARIABLE GLEICH VARIABLE DIVISION VARIABLE ZEILENENDE {
 
   $$ = neuen_knoten_ausdruck(AUFGABE, "=", variable_blatt, division);
 } |
-VARIABLE GLEICH ZEICHEN ZEILENENDE {  
+VARIABLE GLEICH ZEICHEN ZEILENENDE {
   printf("--> VARIABLE=ZEICHEN;\n");
 
   existieren_kontatieren($1);
@@ -283,9 +283,9 @@ VARIABLE GLEICH ZEICHEN ZEILENENDE {
   knoten_as* variable_blatt = neuen_knoten_variable($1);
   knoten_as* knoten_zeichen = neuen_knoten_zeichen($3);
 
-  $$ = neuen_knoten_ausdruck(AUFGABE, "=", variable_blatt, knoten_zeichen);  
-} | 
-VARIABLE GLEICH STRING ZEILENENDE {  
+  $$ = neuen_knoten_ausdruck(AUFGABE, "=", variable_blatt, knoten_zeichen);
+} |
+VARIABLE GLEICH STRING ZEILENENDE {
   printf("--> VARIABLE=STRING;\n");
 
   existieren_kontatieren($1);
@@ -293,8 +293,8 @@ VARIABLE GLEICH STRING ZEILENENDE {
   knoten_as* variable_blatt = neuen_knoten_variable($1);
   knoten_as* knoten_string = neuen_knoten_string($3);
 
-  $$ = neuen_knoten_ausdruck(AUFGABE, "=", variable_blatt, knoten_string); 
-} | 
+  $$ = neuen_knoten_ausdruck(AUFGABE, "=", variable_blatt, knoten_string);
+} |
 VARIABLE GLEICH BOOLEAN ZEILENENDE {
   printf("--> VARIABLE=BOOLEAN;\n");
 
@@ -303,7 +303,7 @@ VARIABLE GLEICH BOOLEAN ZEILENENDE {
   knoten_as* variable_blatt = neuen_knoten_variable($1);
   knoten_as* knoten_boolean = neuen_knoten_boolean($3);
 
-  $$ = neuen_knoten_ausdruck(AUFGABE, "=", variable_blatt, knoten_boolean); 
+  $$ = neuen_knoten_ausdruck(AUFGABE, "=", variable_blatt, knoten_boolean);
 }
 
 //---------------------------
@@ -384,7 +384,7 @@ WENN KLAMMER_OFFEN bedingung KLAMMER_SCHLIESSEN SCHLUOFFEN korper SCHLUSCHLIESSE
   printf("--> WENN -- SONNST\n");
   $$ = neuen_knoten_wenn($3,$6,$10);
 }
-                
+
 wahrend_urteil:
 WAHREND KLAMMER_OFFEN bedingung KLAMMER_SCHLIESSEN SCHLUOFFEN korper SCHLUSCHLIESSEN {
   printf("--> WAHREND\n");
@@ -413,28 +413,57 @@ DEFGANZZAHL VARIABLE ZEILENENDE VARIABLE GLEICH GANZZAHL ZEILENENDE VARIABLE KLE
   knoten_as* ganzzahl_blatt = neuen_knoten_ganzzahl($6);
   knoten_as* ganzzahl_ausdruck = neuen_knoten_ausdruck(AUFGABE, "=", variable_blatt, ganzzahl_blatt);
 
-  printf("--> BEDINGUNG: VARIABLE KLEINER ganzzahl;\n");
+  printf("--> BEDINGUNG: VARIABLE < GANZZAHL;\n");
   existieren_kontatieren($8);
   knoten_as* variable_bedingung = neuen_knoten_variable($8);
   knoten_as* ganzzahl_bedingung = neuen_knoten_ganzzahl($16);
   knoten_as* bedingung = neuen_knoten_ausdruck(BEDINGUNG,"<",variable_bedingung,ganzzahl_bedingung);
-  
+
   printf("--> VARIABLE = VARIABLE + ganzzahl_begriff;\n");
   existieren_kontatieren($12);
   ganzzahl_kontatieren($12);
   existieren_kontatieren($14);
-  ganzzahl_kontatieren($14);  
+  ganzzahl_kontatieren($14);
   knoten_as* variable_blatt_2 = neuen_knoten_variable($14);
   knoten_as* ganzzahl_blatt_2 = neuen_knoten_ganzzahl($16);
   knoten_as* summe_ausdruck = neuen_knoten_ausdruck(GANZZAHL_AUSDRUCK ,"+" , variable_blatt_2, ganzzahl_blatt_2);
 
   $$ = neuen_knoten_fur_ausdruck(ganzzahl_ausdruck, bedingung, summe_ausdruck);
+} |
+DEFGANZZAHL VARIABLE ZEILENENDE VARIABLE GLEICH GANZZAHL ZEILENENDE VARIABLE GROSSER GANZZAHL ZEILENENDE VARIABLE GLEICH VARIABLE SUBSTRAKTION GANZZAHL ZEILENENDE {
+  printf("--> DEFGANZZAHL\n");
+  if (!existieren($2)) {
+    hinzufugen($1, $2);
+  } else{
+    yyerror("Variable existieren.");
+  }
+
+  printf("--> VARIABLE = ganzzahl_ausdruck;\n");
+  existieren_kontatieren($4);
+  ganzzahl_kontatieren($4);
+  knoten_as* variable_blatt = neuen_knoten_variable($4);
+  knoten_as* ganzzahl_blatt = neuen_knoten_ganzzahl($6);
+  knoten_as* ganzzahl_ausdruck = neuen_knoten_ausdruck(AUFGABE, "=", variable_blatt, ganzzahl_blatt);
+
+  printf("--> BEDINGUNG: VARIABLE > GANZZAHL;\n");
+  existieren_kontatieren($8);
+  knoten_as* variable_bedingung = neuen_knoten_variable($8);
+  knoten_as* ganzzahl_bedingung = neuen_knoten_ganzzahl($16);
+  knoten_as* bedingung = neuen_knoten_ausdruck(BEDINGUNG,">",variable_bedingung,ganzzahl_bedingung);
+
+  printf("--> VARIABLE = VARIABLE - ganzzahl_begriff;\n");
+  existieren_kontatieren($12);
+  ganzzahl_kontatieren($12);
+  existieren_kontatieren($14);
+  ganzzahl_kontatieren($14);
+  knoten_as* variable_blatt_2 = neuen_knoten_variable($14);
+  knoten_as* ganzzahl_blatt_2 = neuen_knoten_ganzzahl($16);
+  knoten_as* substraktion_ausdruck = neuen_knoten_ausdruck(GANZZAHL_AUSDRUCK ,"-" , variable_blatt_2, ganzzahl_blatt_2);
+
+  $$ = neuen_knoten_fur_ausdruck(ganzzahl_ausdruck, bedingung, substraktion_ausdruck);
 }
 /*
 |
-DEFGANZZAHL VARIABLE ZEILENENDE VARIABLE GLEICH ganzzahl ZEILENENDE VARIABLE GROSSER ganzzahl ZEILENENDE VARIABLE GLEICH VARIABLE SUBSTRAKTION ganzzahl ZEILENENDE {
-
-} |
 DEFGANZZAHL VARIABLE ZEILENENDE VARIABLE GLEICH ganzzahl ZEILENENDE VARIABLE KLEINER_GLEICH ganzzahl ZEILENENDE VARIABLE GLEICH VARIABLE SUMME ganzzahl ZEILENENDE {
 
 } |
@@ -502,7 +531,7 @@ bedingung UND bedingung {
 bedingung ODER bedingung {
   printf("--> BEDINGUNG: bedingung ODER bedingung;\n");
   $$ = neuen_knoten_ausdruck(BEDINGUNG,"||",$1,$3);
-} | 
+} |
 bedingung UND VARIABLE {
   printf("--> BEDINGUNG: bedingung UND VARIABLE;\n");
   existieren_kontatieren($3);
@@ -534,7 +563,7 @@ VARIABLE ODER bedingung {
 ausdruck UNGLEICH ausdruck {
   printf("--> BEDINGUNG: ausdruck UNGLEICH ausdruck;\n");
   $$ = neuen_knoten_ausdruck(BEDINGUNG,"!=",$1,$3);
-} | 
+} |
 ausdruck GLEICH_GLEICH ausdruck {
   printf("--> BEDINGUNG: ausdruck GLEICH_GLEICH ausdruck;\n");
   $$ = neuen_knoten_ausdruck(BEDINGUNG,"==",$1,$3);
@@ -626,8 +655,8 @@ VARIABLE KLEINER_GLEICH ausdruck {
   existieren_kontatieren($1);
   knoten_as* variable = neuen_knoten_variable($1);
   $$ = neuen_knoten_ausdruck(BEDINGUNG,"<=",variable,$3);
-} | 
-VARIABLE UND VARIABLE {   
+} |
+VARIABLE UND VARIABLE {
   printf("--> BEDINGUNG: VARIABLE UND VARIABLE;\n");
   existieren_kontatieren($1);
   existieren_kontatieren($3);
@@ -647,7 +676,7 @@ VARIABLE ODER VARIABLE {
   knoten_as* v_zwei = neuen_knoten_variable($3);
   $$ = neuen_knoten_ausdruck(BEDINGUNG,"||",variable,v_zwei);
 } |
-VARIABLE UNGLEICH VARIABLE {  
+VARIABLE UNGLEICH VARIABLE {
   printf("--> BEDINGUNG: VARIABLE UNGLEICH VARIABLE;\n");
   existieren_kontatieren($1);
   existieren_kontatieren($3);
