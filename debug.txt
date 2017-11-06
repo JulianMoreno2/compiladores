@@ -1,0 +1,37 @@
+--> DEFGANZZAHL
+Hinzufugte: ganzzahl a 
+--> GANZZAHL
+--> ganzzahl_begriff;
+--> VARIABLE=ganzzahl_ausdruck;
+existieren_kontatieren
+ganzzahl_kontatieren
+ist_ganzzahl
+--> DEFGANZZAHL
+Hinzufugte: ganzzahl b 
+--> GANZZAHL
+--> ganzzahl_begriff;
+--> VARIABLE=ganzzahl_ausdruck;
+existieren_kontatieren
+ganzzahl_kontatieren
+ist_ganzzahl
+--> DEFGANZZAHL
+Hinzufugte: ganzzahl c 
+--> VARIABLE = VARIABLE + VARIABLE;
+existieren_kontatieren
+existieren_kontatieren
+existieren_kontatieren
+typen_vergleichen
+ist_ganzzahl
+ist_ganzzahl
+sind_vom_gleichen_typ
+typen_vergleichen
+ist_ganzzahl
+ist_ganzzahl
+sind_vom_gleichen_typ
+End program! 
+Generating intermediate code !!!!!
+-----durchlaufen wurzel-----
+variable a ganzzahlWert 2 ASIG
+variable b ganzzahlWert 3 ASIG
+variable c variable a variable b ADD
+ASIG

@@ -64,3 +64,5 @@ main{ganzzahl a; a=10; ganzzahl b; fur(ganzzahl c; c = 0; c < 10; c = c + 1;){b=
 main{ganzzahl a; a=10; ganzzahl b; fur(ganzzahl c; c = 10; c > 5; c = c - 1;){b=2;}}
 
 generate{main{ganzzahl a; a=2;}}
+generate{main{ganzzahl a; a=2; ganzzahl b; b=3;}}
+generate{main{ganzzahl a; a=2; ganzzahl b; b=3;ganzzahl c; c=a+b;}}
