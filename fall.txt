@@ -66,3 +66,7 @@ main{ganzzahl a; a=10; ganzzahl b; fur(ganzzahl c; c = 10; c > 5; c = c - 1;){b=
 generate{main{ganzzahl a; a=2;}}
 generate{main{ganzzahl a; a=2; ganzzahl b; b=3;}}
 generate{main{ganzzahl a; a=2; ganzzahl b; b=3;ganzzahl c; c=a+b;}}
+generate{main{gleitkomma a; ganzzahl b; gleitkomma c; boolean d; string e; zeichen f; a=2.1; b=3; c=a+b; d=falsch; e="hola"; f='h';}}
+
+generate{main{ganzzahl a; boolean b; b=richtig; wenn(b){a=2;}}}
+generate{main{ganzzahl a; boolean b; b=richtig; wenn(b){a=2;}sonnst{a=3;}}}

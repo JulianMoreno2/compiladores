@@ -40,6 +40,12 @@
 #define BEDINGUNG 31 // condicion?
 #define FUR_URTEIL 32
 #define FUR_AUSDRUCK 33
+#define DEF_GANZZAHL 34
+#define DEF_GLEITKOMMA 35
+#define DEF_ZEICHEN 36
+#define DEF_STRING 37
+#define DEF_BOOLEAN 38
+#define WENN_AUSDRUCK 39
 
 
 typedef struct knoten_as
@@ -56,6 +62,9 @@ typedef struct knoten_as
     struct knoten_as* mittel;
     struct knoten_as* rechte;
 } knoten_as;
+
+struct knoten_as * intermediate_code = NULL;
+int flag = 0;
 
 //Nuevo nodo expresion
 struct knoten_as* neuen_knoten_ausdruck (int knotenTyp, char* operatore, struct knoten_as* linke, struct knoten_as* rechte) {
@@ -134,6 +143,18 @@ struct knoten_as* neuen_knoten_variable(char* variable)
     return neuenKnoten;
 }
 
+struct knoten_as* neuen_knoten_def(int knotenTyp, char* variable)
+{
+    struct knoten_as* neuenKnoten = (struct knoten_as*) malloc(sizeof(struct knoten_as));
+    neuenKnoten->knotenTyp = knotenTyp;
+    neuenKnoten->variable = (char*) malloc(sizeof(char) * 50);
+    strcpy(neuenKnoten->variable, variable);
+    neuenKnoten->mittel = 0;
+    neuenKnoten->rechte = 0;
+    neuenKnoten->linke = 0;
+    return neuenKnoten;   
+};
+
 struct knoten_as* neuen_knoten_wenn(struct knoten_as* bedingung, struct knoten_as* mittel, struct knoten_as* rechte)
 {
     struct knoten_as* neuenKnoten = (struct knoten_as*) malloc(sizeof(struct knoten_as));
@@ -178,53 +199,103 @@ struct knoten_as* neuen_knoten_fur_ausdruck(struct knoten_as* ganzzahl_ausdruck,
     return neuenKnoten;
 }
 
-
-
-void in_orden(struct knoten_as* wurzel){    
+void in_orden(struct knoten_as* wurzel){
     if (wurzel!=NULL){
+        in_orden(wurzel->mittel);
         in_orden(wurzel->linke);
         in_orden(wurzel->rechte);
         
         
         if (wurzel->operatore!=NULL){
-            if ((strcmp (wurzel->operatore, "="))==0){
-                printf("ASIG\n");
-            }else if ((strcmp (wurzel->operatore, "+"))==0){
-                printf("ADD\n");
-            }else if ((strcmp (wurzel->operatore, "-"))==0){
-                printf("SUB\n");
-            }else if ((strcmp (wurzel->operatore, "*"))==0){
-                printf("MUL\n");
-            }else if ((strcmp (wurzel->operatore, "/"))==0){
-                printf("DIV\n");
+            intermediate_code->operatore = wurzel->operatore;
+            if ((strcmp (intermediate_code->operatore, "="))==0){
+                printf("ASIG ");
+            }else if ((strcmp (intermediate_code->operatore, "+"))==0){
+                printf("ADD ");
+                flag++;
+            }else if ((strcmp (intermediate_code->operatore, "-"))==0){
+                printf("SUB ");
+                flag++;
+            }else if ((strcmp (intermediate_code->operatore, "*"))==0){
+                printf("MUL ");
+                flag++;
+            }else if ((strcmp (intermediate_code->operatore, "/"))==0){
+                printf("DIV ");
+                flag++;
             }
+            
+            if(flag > 2) {
+                flag = 0;
+                printf("\n");
+            } else if(flag == 0) {
+                printf("\n");
+            }            
         }
+
+        if(wurzel->knotenTyp==WENN_AUSDRUCK){
+            printf("WENN ");
+        }
+
         if (wurzel->variable!=NULL){
-            printf("variable %s ",wurzel->variable);
-            //printf("knotenTyp %d\n",wurzel->knotenTyp);
-        }    
-        
+            printf("%s ",wurzel->variable);
+            intermediate_code->variable = wurzel->variable;
+        } 
+
+        if (wurzel->knotenTyp==DEF_GANZZAHL){
+            printf("DEF_GANZZAHL \n");
+            intermediate_code->knotenTyp = wurzel->knotenTyp;
+        }
+
+        if (wurzel->knotenTyp==DEF_GLEITKOMMA){
+            printf("DEF_GLEITKOMMA \n");
+            intermediate_code->knotenTyp = wurzel->knotenTyp;
+        }
+
+        if (wurzel->knotenTyp==DEF_ZEICHEN){
+            printf("DEF_ZEICHEN \n");
+            intermediate_code->knotenTyp = wurzel->knotenTyp;
+        }
+
+        if (wurzel->knotenTyp==DEF_STRING){
+            printf("DEF_STRING \n");
+            intermediate_code->knotenTyp = wurzel->knotenTyp;
+        }
+
+        if (wurzel->knotenTyp==DEF_BOOLEAN){
+            printf("DEF_BOOLEAN \n");
+            intermediate_code->knotenTyp = wurzel->knotenTyp;
+        }
+
         if (wurzel->knotenTyp==GANZZAHL_BLATT){
-            printf("ganzzahlWert %d ",wurzel->ganzzahlWert);
+            printf("%d ",wurzel->ganzzahlWert);
+            intermediate_code->ganzzahlWert = wurzel->ganzzahlWert;
         }
         if (wurzel->knotenTyp==GLEITKOMMA_BLATT){
-            printf("gleitkommaWert %f ",wurzel->gleitkommaWert);
+            printf("%f ",wurzel->gleitkommaWert);
+            intermediate_code->gleitkommaWert = wurzel->gleitkommaWert;
         }
         if (wurzel->knotenTyp==ZEICHEN_BLATT){
-            printf("zeichenWert %s ",wurzel->zeichenWert);
+            printf("%s ",wurzel->zeichenWert);
+            intermediate_code->zeichenWert = wurzel->zeichenWert;
         }
         if (wurzel->knotenTyp==STRING_BLATT){
-            printf("stringWert %s ",wurzel->stringWert);
+            printf("%s ",wurzel->stringWert);
+            intermediate_code->stringWert = wurzel->stringWert;
         }
         if (wurzel->knotenTyp==BOOLEAN_BLATT){
-            printf("booleanWert %s ",wurzel->booleanWert);
+            printf("%s ",wurzel->booleanWert);
+            intermediate_code->booleanWert = wurzel->booleanWert;
         }
+        //printf("knotenTyp %d\n",wurzel->knotenTyp);
+        intermediate_code->knotenTyp = wurzel->knotenTyp;
+
     }
 }
 
 void generate_intermediate_code(struct knoten_as* wurzel) {
     printf("Generating intermediate code !!!!!\n");
     printf("-----durchlaufen wurzel-----\n");
+    intermediate_code = (struct knoten_as*) malloc(sizeof(struct knoten_as));
     in_orden(wurzel);
 }
 

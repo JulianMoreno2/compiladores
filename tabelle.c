@@ -18,7 +18,6 @@ void hinzufugen (symbol typ_eingegeben, symbol variable_eingegeben) {
     strcpy( symbol_tabelle[reihe][0], typ_eingegeben );
     strcpy( symbol_tabelle[reihe][1], variable_eingegeben );
 
-    printf( "Hinzufugte: %s %s \n", symbol_tabelle [reihe][0], symbol_tabelle [reihe][1] );
     reihe++;
 }
 
@@ -35,7 +34,6 @@ int existieren (symbol variable_eingegeben) {
 }
 
 void existieren_kontatieren (symbol variable) {
-    printf("existieren_kontatieren\n");
     if (!existieren(variable)) {
         yyerror("Variable nicht definiten.\n");
     }
@@ -60,7 +58,6 @@ int ist_gleitkomma (symbol variable) {
     typ_des(variable, typ);
     int ist = 0;
     if (strcmp(typ, "gleitkomma") == 0) {
-        printf("ist_gleitkomma\n");
         ist = 1;
     }
     return ist;
@@ -71,7 +68,6 @@ int ist_ganzzahl (symbol variable) {
     typ_des(variable, typ);
     int ist = 0;
     if (strcmp(typ, "ganzzahl") == 0) {
-        printf("ist_ganzzahl\n");
         ist = 1;
     }
     return ist;
@@ -82,7 +78,6 @@ int ist_zeichen (symbol variable) {
     typ_des(variable, typ);
     int ist = 0;
     if (strcmp(typ, "zeichen") == 0) {
-        printf("ist_zeichen\n");
         ist = 1;
     }
     return ist;
@@ -93,7 +88,6 @@ int ist_string (symbol variable) {
     typ_des(variable, typ);
     int ist = 0;
     if (strcmp(typ, "string") == 0) {
-        printf("ist_string\n");
         ist = 1;
     }
     return ist;
@@ -104,42 +98,36 @@ int ist_boolean (symbol variable) {
     typ_des(variable, typ);
     int ist = 0;
     if (strcmp(typ, "boolean") == 0) {
-        printf("ist_boolean\n");
         ist = 1;
     }
     return ist;
 }
 
 void ganzzahl_kontatieren (symbol variable) {
-    printf("ganzzahl_kontatieren\n");
     if (!ist_ganzzahl(variable)) {
         yyerror("Variable nicht ist ganzzahl.\n");
     }
 }
 
 void gleitkomma_kontatieren (symbol variable) {
-    printf("gleitkomma_kontatieren\n");
     if (!ist_gleitkomma(variable)) {
         yyerror("Variable nicht ist gleitkomma.\n");
     }
 }
 
 void zeichen_kontatieren (symbol variable) {
-    printf("zeichen_kontatieren\n");
     if (!ist_zeichen(variable)) {
         yyerror("Variable nicht ist zeichen.\n");
     }
 }
 
 void string_kontatieren (symbol variable) {
-    printf("string_kontatieren\n");
     if (!ist_string(variable)) {
         yyerror("Variable nicht ist string.\n");
     }
 }
 
 void boolean_kontatieren (symbol variable) {
-    printf("boolean_kontatieren\n");
     if (!ist_boolean(variable)) {
         yyerror("Variable nicht ist boolean.\n");
     }
@@ -154,7 +142,6 @@ int sind_ganzzahl (symbol variable_eingegeben_1, symbol variable_eingegeben_2) {
     typ_des(variable_eingegeben_2, typ_2);
 
     if ((ist_ganzzahl(typ_1) == 1) && (ist_ganzzahl(typ_2) == 1)) {
-        printf("sind_ganzzahl\n");
         sind_ganzzahl = 1;
     }
 
@@ -180,14 +167,10 @@ int sind_vom_gleichen_typ (symbol variable_eingegeben_1, symbol variable_eingege
         gleich_typ = 1;
     }
 
-    if(gleich_typ == 1) {
-        printf("sind_vom_gleichen_typ\n");
-    }
     return gleich_typ;
 }
 
 void typen_vergleichen(symbol a, symbol b) {
-    printf("typen_vergleichen\n");
     if (sind_vom_gleichen_typ(a, b) == 0) {
         yyerror("Inkompatible Typen");
     }
