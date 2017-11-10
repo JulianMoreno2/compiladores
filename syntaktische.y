@@ -381,11 +381,14 @@ WENN KLAMMER_OFFEN bedingung KLAMMER_SCHLIESSEN SCHLUOFFEN korper SCHLUSCHLIESSE
   $$ = neuen_knoten_wenn($3,wenn_typ,$6);
 } |
 WENN KLAMMER_OFFEN bedingung KLAMMER_SCHLIESSEN SCHLUOFFEN korper SCHLUSCHLIESSEN SONNST SCHLUOFFEN korper SCHLUSCHLIESSEN {
+  knoten_as* wurzel = NULL;
   knoten_as* wenn_typ = neuen_knoten_ausdruck(39,"",0,0);
+  knoten_as* sonst_typ = neuen_knoten_ausdruck(40,"",0,0);
   // nodo tipo_else = nuevo nodo 40 "" 0 0
   // nodo sonnst medio -> tipo_else, izq -> $6 (korper verdadero), der -> $10 (korper falso) 
   // $$ = neuen_knoten_wenn($3,wenn_typ,nodo_sonnst);
-  $$ = neuen_knoten_wenn($3,wenn_typ,$6);
+  wurzel = neuen_knoten_sonst(wurzel, $3,wenn_typ,0);
+  $$ = neuen_knoten_sonst(wurzel, sonst_typ,$6,$10);
 }
 
 wahrend_urteil:

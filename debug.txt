@@ -3,9 +3,12 @@ Generating intermediate code !!!!!
 a DEF_GANZZAHL 
 b DEF_BOOLEAN 
 b richtig ASIG 
-a 3 ASIG 
-b 
+
+WENN b 
 a 2 ASIG 
+
+SONST 
+a 3 ASIG 
 
 
 

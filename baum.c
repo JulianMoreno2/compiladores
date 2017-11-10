@@ -46,6 +46,8 @@
 #define DEF_STRING 37
 #define DEF_BOOLEAN 38
 #define WENN_AUSDRUCK 39
+#define SONST_AUSDRUCK 40
+#define SONST_URTEIL 41
 
 
 typedef struct knoten_as
@@ -165,6 +167,26 @@ struct knoten_as* neuen_knoten_wenn(struct knoten_as* bedingung, struct knoten_a
     neuenKnoten->rechte = rechte;
     return neuenKnoten;
 }
+struct knoten_as* neuen_knoten_sonst(struct knoten_as* wurzel,struct knoten_as* linke, struct knoten_as* mittel, struct knoten_as* rechte)
+{
+    struct knoten_as* neuenKnoten = NULL;
+    if (wurzel == NULL){
+        neuenKnoten = (struct knoten_as*) malloc(sizeof(struct knoten_as));
+        neuenKnoten->operatore = 0;
+        neuenKnoten->knotenTyp = SONST_URTEIL;
+        neuenKnoten->linke = linke;
+        neuenKnoten->mittel = mittel;
+        neuenKnoten->rechte = rechte;
+        wurzel = neuenKnoten;
+        return neuenKnoten;
+
+    }
+    if (wurzel->rechte==NULL){
+        wurzel->rechte = neuen_knoten_sonst(wurzel->rechte,linke, mittel, rechte);
+    }
+    return wurzel;
+
+}
 
 struct knoten_as* neuen_knoten_wahrend(struct knoten_as* bedingung, struct knoten_as* korper)
 {
@@ -234,6 +256,10 @@ void in_orden(struct knoten_as* wurzel){
 
         if(wurzel->knotenTyp==WENN_AUSDRUCK){
             printf("WENN ");
+        }
+
+        if(wurzel->knotenTyp==SONST_AUSDRUCK){
+            printf("SONST \n");
         }
 
         if (wurzel->variable!=NULL){
