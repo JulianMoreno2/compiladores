@@ -4,11 +4,10 @@ a DEF_GANZZAHL
 b DEF_BOOLEAN 
 b richtig ASIG 
 
-WENN b 
+WAHREND_AUSDRUCK b 
 a 2 ASIG 
+b falsch ASIG 
 
-SONST 
-a 3 ASIG 
 
 
 

@@ -48,7 +48,7 @@
 #define WENN_AUSDRUCK 39
 #define SONST_AUSDRUCK 40
 #define SONST_URTEIL 41
-
+#define WAHREND_AUSDRUCK 42
 
 typedef struct knoten_as
 {
@@ -188,14 +188,14 @@ struct knoten_as* neuen_knoten_sonst(struct knoten_as* wurzel,struct knoten_as* 
 
 }
 
-struct knoten_as* neuen_knoten_wahrend(struct knoten_as* bedingung, struct knoten_as* korper)
+struct knoten_as* neuen_knoten_wahrend(struct knoten_as* bedingung, struct knoten_as* mittel, struct knoten_as* rechte)
 {
     struct knoten_as* neuenKnoten = (struct knoten_as*) malloc(sizeof(struct knoten_as));
     neuenKnoten->operatore = 0;
     neuenKnoten->knotenTyp = WAHREND_URTEIL;
     neuenKnoten->linke = bedingung;
-    neuenKnoten->mittel = 0;
-    neuenKnoten->rechte = korper;
+    neuenKnoten->mittel = mittel;
+    neuenKnoten->rechte = rechte;
     return neuenKnoten;
 }
 
@@ -260,6 +260,10 @@ void in_orden(struct knoten_as* wurzel){
 
         if(wurzel->knotenTyp==SONST_AUSDRUCK){
             printf("SONST \n");
+        }
+
+        if(wurzel->knotenTyp==WAHREND_AUSDRUCK){
+            printf("WAHREND_AUSDRUCK ");
         }
 
         if (wurzel->variable!=NULL){
