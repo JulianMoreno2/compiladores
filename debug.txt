@@ -1,12 +1,22 @@
 Generating intermediate code !!!!!
 -----durchlaufen wurzel-----
 a DEF_GANZZAHL 
-b DEF_BOOLEAN 
-b richtig ASIG 
-
-WAHREND_AUSDRUCK b 
 a 2 ASIG 
-b falsch ASIG 
+b DEF_GANZZAHL 
+b 3 ASIG 
+d DEF_GANZZAHL 
+d 2 ASIG 
+e DEF_GANZZAHL 
+e 3 ASIG 
+
+WENN a b <= 
+d e == 
+|| 
+a 2 ASIG 
+
+
+
+
 
 
 

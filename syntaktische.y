@@ -398,8 +398,8 @@ WAHREND KLAMMER_OFFEN bedingung KLAMMER_SCHLIESSEN SCHLUOFFEN korper SCHLUSCHLIE
 
 fur_urteil:
 FUR KLAMMER_OFFEN fur_ausdruck KLAMMER_SCHLIESSEN SCHLUOFFEN korper SCHLUSCHLIESSEN {
-  
-  $$ = neuen_knoten_fur($3,$6);
+  knoten_as* fur_typ = neuen_knoten_ausdruck(32,"",0,0);
+  $$ = neuen_knoten_fur($3,fur_typ,$6);
 }
 
 fur_ausdruck:
@@ -439,13 +439,15 @@ DEFGANZZAHL VARIABLE ZEILENENDE VARIABLE GLEICH GANZZAHL ZEILENENDE VARIABLE KLE
 } |
 DEFGANZZAHL VARIABLE ZEILENENDE VARIABLE GLEICH GANZZAHL ZEILENENDE VARIABLE GROSSER GANZZAHL ZEILENENDE VARIABLE GLEICH VARIABLE SUBSTRAKTION GANZZAHL ZEILENENDE {
   
+  knoten_as* variable = neuen_knoten_def(34,$2);
+  $$ = variable;
   if (!existieren($2)) {
     hinzufugen($1, $2);
   } else{
     yyerror("Variable existieren.");
   }
 
-  
+
   existieren_kontatieren($4);
   ganzzahl_kontatieren($4);
   knoten_as* variable_blatt = neuen_knoten_variable($4);
@@ -455,7 +457,7 @@ DEFGANZZAHL VARIABLE ZEILENENDE VARIABLE GLEICH GANZZAHL ZEILENENDE VARIABLE GRO
   
   existieren_kontatieren($8);
   knoten_as* variable_bedingung = neuen_knoten_variable($8);
-  knoten_as* ganzzahl_bedingung = neuen_knoten_ganzzahl($16);
+  knoten_as* ganzzahl_bedingung = neuen_knoten_ganzzahl($10);
   knoten_as* bedingung = neuen_knoten_ausdruck(BEDINGUNG,">",variable_bedingung,ganzzahl_bedingung);
 
   

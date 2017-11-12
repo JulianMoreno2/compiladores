@@ -188,24 +188,24 @@ struct knoten_as* neuen_knoten_sonst(struct knoten_as* wurzel,struct knoten_as* 
 
 }
 
-struct knoten_as* neuen_knoten_wahrend(struct knoten_as* bedingung, struct knoten_as* mittel, struct knoten_as* rechte)
+struct knoten_as* neuen_knoten_wahrend(struct knoten_as* bedingung, struct knoten_as* mittel, struct knoten_as* korper)
 {
     struct knoten_as* neuenKnoten = (struct knoten_as*) malloc(sizeof(struct knoten_as));
     neuenKnoten->operatore = 0;
     neuenKnoten->knotenTyp = WAHREND_URTEIL;
     neuenKnoten->linke = bedingung;
     neuenKnoten->mittel = mittel;
-    neuenKnoten->rechte = rechte;
+    neuenKnoten->rechte = korper;
     return neuenKnoten;
 }
 
-struct knoten_as* neuen_knoten_fur(struct knoten_as* fur_asdruck, struct knoten_as* korper)
+struct knoten_as* neuen_knoten_fur(struct knoten_as* fur_asdruck,struct knoten_as* mittel, struct knoten_as* korper)
 {
     struct knoten_as* neuenKnoten = (struct knoten_as*) malloc(sizeof(struct knoten_as));
     neuenKnoten->operatore = 0;
     neuenKnoten->knotenTyp = FUR_URTEIL;
     neuenKnoten->linke = fur_asdruck;
-    neuenKnoten->mittel = 0;
+    neuenKnoten->mittel = mittel;
     neuenKnoten->rechte = korper;
     return neuenKnoten;
 }
@@ -215,8 +215,8 @@ struct knoten_as* neuen_knoten_fur_ausdruck(struct knoten_as* ganzzahl_ausdruck,
     struct knoten_as* neuenKnoten = (struct knoten_as*) malloc(sizeof(struct knoten_as));
     neuenKnoten->operatore = 0;
     neuenKnoten->knotenTyp = FUR_AUSDRUCK;
-    neuenKnoten->linke = ganzzahl_ausdruck;
-    neuenKnoten->mittel = bedingung;
+    neuenKnoten->linke = bedingung;
+    neuenKnoten->mittel = ganzzahl_ausdruck;
     neuenKnoten->rechte = summe_ausdruck;
     return neuenKnoten;
 }
@@ -244,7 +244,27 @@ void in_orden(struct knoten_as* wurzel){
             }else if ((strcmp (intermediate_code->operatore, "/"))==0){
                 printf("DIV ");
                 flag++;
+            }else if ((strcmp (intermediate_code->operatore, ">"))==0){
+                printf("> ");
+            }else if ((strcmp (intermediate_code->operatore, "<"))==0){
+                printf("< ");
+            }else if ((strcmp (intermediate_code->operatore, "=="))==0){
+                printf("== ");
+            }else if ((strcmp (intermediate_code->operatore, "!="))==0){
+                printf("!= ");
+            }else if ((strcmp (intermediate_code->operatore, ">="))==0){
+                printf(">= ");
+            }else if ((strcmp (intermediate_code->operatore, "<="))==0){
+                printf("<= ");
+            }else if ((strcmp (intermediate_code->operatore, "||"))==0){
+                printf("|| ");
+            }else if ((strcmp (intermediate_code->operatore, "&&"))==0){
+                printf("&& ");
+            }else if ((strcmp (intermediate_code->operatore, "!"))==0){
+                printf("! ");
             }
+
+
             
             if(flag > 2) {
                 flag = 0;
@@ -264,6 +284,11 @@ void in_orden(struct knoten_as* wurzel){
 
         if(wurzel->knotenTyp==WAHREND_AUSDRUCK){
             printf("WAHREND_AUSDRUCK ");
+        }
+
+        if(wurzel->knotenTyp==FUR_URTEIL){
+            printf("FUR_URTEIL ");
+            flag++;
         }
 
         if (wurzel->variable!=NULL){
