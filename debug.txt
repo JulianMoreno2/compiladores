@@ -1,23 +1,20 @@
 Generating intermediate code !!!!!
 -----durchlaufen wurzel-----
 a DEF_GANZZAHL 
+b DEF_BOOLEAN 
+b richtig ASIG 
+
+EQ b JMP E1
 a 2 ASIG 
-b DEF_GANZZAHL 
-b 3 ASIG 
-d DEF_GANZZAHL 
-d 2 ASIG 
-e DEF_GANZZAHL 
-e 3 ASIG 
+JMP E2 
+E1 (SONST)
+EQ a 2 CMP JMP E3
+b richtig ASIG 
+JMP E4 
+E3 (SONST)
+a 4 ASIG 
+E4 
+E2 a a 3 ADD 
+ASIG 
 
-WENN a b <= 
-d e == 
-|| 
-a 2 ASIG 
-
-
-
-
-
-
-
-
+a a 4 ADD ASIG 

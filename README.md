@@ -8,7 +8,7 @@ $ gcc -o analyzator lex.yy.c syntaktische.tab.c
 
 ## Para ejecutar
 
-$ ./analyzator
+$ ./analyzator>debug.txt
 
 
 #Convenciones

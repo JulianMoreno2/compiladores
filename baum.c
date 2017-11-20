@@ -66,7 +66,9 @@ typedef struct knoten_as
 } knoten_as;
 
 struct knoten_as * intermediate_code = NULL;
+struct knoten_as * aux_code = NULL;
 int flag = 0;
+int flag_go_to = 0;
 
 //Nuevo nodo expresion
 struct knoten_as* neuen_knoten_ausdruck (int knotenTyp, char* operatore, struct knoten_as* linke, struct knoten_as* rechte) {
@@ -245,23 +247,23 @@ void in_orden(struct knoten_as* wurzel){
                 printf("DIV ");
                 flag++;
             }else if ((strcmp (intermediate_code->operatore, ">"))==0){
-                printf("> ");
+                printf("GT ");
             }else if ((strcmp (intermediate_code->operatore, "<"))==0){
-                printf("< ");
+                printf("LT ");
             }else if ((strcmp (intermediate_code->operatore, "=="))==0){
-                printf("== ");
+                printf("CMP ");
             }else if ((strcmp (intermediate_code->operatore, "!="))==0){
-                printf("!= ");
+                printf("DIS ");
             }else if ((strcmp (intermediate_code->operatore, ">="))==0){
                 printf(">= ");
             }else if ((strcmp (intermediate_code->operatore, "<="))==0){
                 printf("<= ");
             }else if ((strcmp (intermediate_code->operatore, "||"))==0){
-                printf("|| ");
+                printf("OR ");
             }else if ((strcmp (intermediate_code->operatore, "&&"))==0){
-                printf("&& ");
+                printf("AND ");
             }else if ((strcmp (intermediate_code->operatore, "!"))==0){
-                printf("! ");
+                printf("NOT ");
             }
 
 
@@ -271,15 +273,23 @@ void in_orden(struct knoten_as* wurzel){
                 printf("\n");
             } else if(flag == 0) {
                 printf("\n");
-            }            
+            }
+                      
         }
 
+                
+
         if(wurzel->knotenTyp==WENN_AUSDRUCK){
-            printf("WENN ");
+            printf("EQ ");
+            aux_code->knotenTyp = wurzel->knotenTyp;
+            flag++;
         }
 
         if(wurzel->knotenTyp==SONST_AUSDRUCK){
-            printf("SONST \n");
+            printf("\nJMP E%d \n",flag_go_to+1);
+            printf("E%d (SONST)\n",flag_go_to);
+            aux_code->knotenTyp = wurzel->knotenTyp;
+            flag_go_to++;
         }
 
         if(wurzel->knotenTyp==WAHREND_AUSDRUCK){
@@ -288,7 +298,7 @@ void in_orden(struct knoten_as* wurzel){
 
         if(wurzel->knotenTyp==FUR_URTEIL){
             printf("FUR_URTEIL ");
-            flag++;
+            //flag++;
         }
 
         if (wurzel->variable!=NULL){
@@ -341,8 +351,30 @@ void in_orden(struct knoten_as* wurzel){
             printf("%s ",wurzel->booleanWert);
             intermediate_code->booleanWert = wurzel->booleanWert;
         }
-        //printf("knotenTyp %d\n",wurzel->knotenTyp);
+
         intermediate_code->knotenTyp = wurzel->knotenTyp;
+        if(wurzel->rechte!=NULL){
+            if(aux_code->knotenTyp == WENN_AUSDRUCK){
+                flag_go_to++;
+                printf("JMP E%d\n",flag_go_to);
+                aux_code->knotenTyp = 0;
+            };
+        }
+        /**/
+        if(wurzel->linke!=NULL){
+            if(flag_go_to > 0){
+                if(wurzel->linke->knotenTyp == SONST_AUSDRUCK){
+                    printf("\nE%d ",flag_go_to);
+                    flag_go_to = flag_go_to - 2;
+                    aux_code->knotenTyp = 0;
+                }
+                if (wurzel->linke->knotenTyp == 282){
+                    printf("\nE%d ",flag_go_to);
+                    flag_go_to = flag_go_to - 2;
+                }
+            }
+        }
+        /**/
 
     }
 }
@@ -351,6 +383,7 @@ void generate_intermediate_code(struct knoten_as* wurzel) {
     printf("Generating intermediate code !!!!!\n");
     printf("-----durchlaufen wurzel-----\n");
     intermediate_code = (struct knoten_as*) malloc(sizeof(struct knoten_as));
+    aux_code = (struct knoten_as*) malloc(sizeof(struct knoten_as));
     in_orden(wurzel);
 }
 
